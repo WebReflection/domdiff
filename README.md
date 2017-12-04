@@ -27,6 +27,32 @@ futureNodes = domdiff(
   * via bundlers/transpilers: `import domdiff from 'domdiff';` <sup><sub>( or `from 'domdiff/esm'` )</sub></sup>
 
 
+### Example
+
+```js
+var nodes = {
+  a: document.createTextNode('a'),
+  b: document.createTextNode('b'),
+  c: document.createTextNode('c')
+};
+
+var parentNode = document.createElement('p');
+var childNodes = [nodes.a, nodes.c];
+parentNode.append(...childNodes);
+parentNode.textContent;
+// "ac"
+
+childNodes = domdiff(
+  parentNode,
+  childNodes,
+  [nodes.a, nodes.b, nodes.c]
+);
+
+parentNode.textContent;
+// "abc"
+```
+
+
 ### Compatibility:
 
 Every. JavaScript. Engine.
