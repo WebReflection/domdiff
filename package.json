@@ -1,0 +1,47 @@
+{
+  "name": "domdiff",
+  "version": "0.0.0",
+  "description": "A fast and simple way to diff childNodes",
+  "browser": "min.js",
+  "main": "cjs/index.js",
+  "module": "esm/index.js",
+  "scripts": {
+    "build": "npm run cjs && npm run bundle && npm run min && npm run test && npm run size",
+    "bundle": "rollup --config rollup.config.js && npm run cleanup",
+    "cleanup": "echo \"$(cat index.js | sed 's/return exports;/return domdiff;/' | sed -e 's/exports.*;//g')\" > index.js",
+    "cjs": "ascjs ./esm ./cjs",
+    "coveralls": "cat ./coverage/lcov.info | coveralls",
+    "min": "uglifyjs index.js --support-ie8 --comments=/^!/ -cmo min.js",
+    "size": "echo \"gzip: $(cat min.js | gzip -c9 | wc -c)\" && echo \"brotli: $(cat min.js | brotli | wc -c)\" && echo ''",
+    "test": "istanbul cover test/node.js"
+  },
+  "keywords": [
+    "dom",
+    "diff"
+  ],
+  "author": "Andrea Giammarchi",
+  "license": "ISC",
+  "devDependencies": {
+    "ascjs": "^2.4.0",
+    "babel-cli": "^6.26.0",
+    "babel-plugin-check-es2015-constants": "^6.22.0",
+    "babel-plugin-transform-es2015-arrow-functions": "^6.22.0",
+    "babel-plugin-transform-es2015-block-scoped-functions": "^6.22.0",
+    "babel-plugin-transform-es2015-block-scoping": "^6.26.0",
+    "babel-plugin-transform-es2015-classes": "^6.24.1",
+    "babel-plugin-transform-es2015-computed-properties": "^6.24.1",
+    "babel-plugin-transform-es2015-destructuring": "^6.23.0",
+    "babel-plugin-transform-es2015-duplicate-keys": "^6.24.1",
+    "babel-plugin-transform-es2015-function-name": "^6.24.1",
+    "babel-plugin-transform-es2015-literals": "^6.22.0",
+    "babel-plugin-transform-es2015-shorthand-properties": "^6.24.1",
+    "babel-plugin-transform-es2015-spread": "^6.22.0",
+    "babel-plugin-transform-es2015-template-literals": "^6.22.0",
+    "coveralls": "^3.0.0",
+    "istanbul": "^0.4.5",
+    "rollup": "^0.52.0",
+    "rollup-plugin-babel": "^3.0.2",
+    "tressa": "^0.3.1",
+    "uglify-js": "^2.8.29"
+  }
+}

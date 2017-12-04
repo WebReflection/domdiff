@@ -1,0 +1,13 @@
+{
+  "extends": "eslint:recommended",
+  "globals": {
+    "Promise": true
+  },
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "rules": {
+    "no-case-declarations": 0,
+    "no-fallthrough": 0
+  }
+}

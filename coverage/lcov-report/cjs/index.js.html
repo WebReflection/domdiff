@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for cjs/index.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">cjs/</a> index.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>59/59</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>38/38</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/0</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>56/56</span>
+      </div>
+      <div class='fl pad1y'>
+        <span class="strong">1 statement, 3 branches</span>
+        <span class="quiet">Ignored</span>  &nbsp;&nbsp;&nbsp;&nbsp;
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">569×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">98×</span>
+<span class="cline-any cline-yes">98×</span>
+<span class="cline-any cline-yes">98×</span>
+<span class="cline-any cline-yes">98×</span>
+<span class="cline-any cline-yes">98×</span>
+<span class="cline-any cline-yes">98×</span>
+<span class="cline-any cline-yes">98×</span>
+<span class="cline-any cline-yes">98×</span>
+<span class="cline-any cline-yes">98×</span>
+<span class="cline-any cline-yes">98×</span>
+<span class="cline-any cline-yes">447×</span>
+<span class="cline-any cline-yes">44×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">403×</span>
+<span class="cline-any cline-yes">11×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">392×</span>
+<span class="cline-any cline-yes">22×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">370×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">365×</span>
+<span class="cline-any cline-yes">140×</span>
+<span class="cline-any cline-yes">140×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">225×</span>
+<span class="cline-any cline-yes">50×</span>
+<span class="cline-any cline-yes">50×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">175×</span>
+<span class="cline-any cline-yes">52×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">52×</span>
+<span class="cline-any cline-yes">52×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">123×</span>
+<span class="cline-any cline-yes">27×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">27×</span>
+<span class="cline-any cline-yes">27×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">96×</span>
+<span class="cline-any cline-yes">96×</span>
+<span class="cline-any cline-yes">52×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">52×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">44×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">44×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">44×</span>
+<span class="cline-any cline-yes">44×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">44×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">98×</span>
+<span class="cline-any cline-yes">52×</span>
+<span class="cline-any cline-yes">52×</span>
+<span class="cline-any cline-yes">52×</span>
+<span class="cline-any cline-yes">63×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">63×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">46×</span>
+<span class="cline-any cline-yes">46×</span>
+<span class="cline-any cline-yes">116×</span>
+<span class="cline-any cline-yes">116×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">98×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">'use strict';
+/*! (c) 2017 Andrea Giammarchi (ISC) */
+&nbsp;
+const identity = O =&gt; O;
+&nbsp;
+const domdiff = (
+  parentNode,     // where changes happen
+  currentNodes,   // Array of current items/nodes
+  futureNodes,    // Array of future items/nodes
+  getNode,        // optional way to retrieve a node from an item
+  beforeNode      // optional item/node to use as insertBefore delimiter
+) =&gt; {
+  const get = getNode || identity;
+  const before = beforeNode == null ? null : get(beforeNode);
+  let currentStart = 0, futureStart = 0;
+  let currentEnd = currentNodes.length - 1;
+  let currentStartNode = currentNodes[0];
+  let currentEndNode = currentNodes[currentEnd];
+  let futureEnd = futureNodes.length - 1;
+  let futureStartNode = futureNodes[0];
+  let futureEndNode = futureNodes[futureEnd];
+  while (currentStart &lt;= currentEnd &amp;&amp; futureStart &lt;= futureEnd) {
+    if (currentStartNode == null) {
+      currentStartNode = currentNodes[++currentStart];
+    }
+    else if (currentEndNode == null) {
+      currentEndNode = currentNodes[--currentEnd];
+    }
+    else if (futureStartNode == null) {
+      futureStartNode = futureNodes[++futureStart];
+    }
+    else if (futureEndNode == null) {
+      futureEndNode = futureNodes[--futureEnd];
+    }
+    else if (currentStartNode == futureStartNode) {
+      currentStartNode = currentNodes[++currentStart];
+      futureStartNode = futureNodes[++futureStart];
+    }
+    else if (currentEndNode == futureEndNode) {
+      currentEndNode = currentNodes[--currentEnd];
+      futureEndNode = futureNodes[--futureEnd];
+    }
+    else if (currentStartNode == futureEndNode) {
+      parentNode.insertBefore(
+        get(currentStartNode),
+        get(currentEndNode).nextSibling || before
+      );
+      currentStartNode = currentNodes[++currentStart];
+      futureEndNode = futureNodes[--futureEnd];
+    }
+    else if (currentEndNode == futureStartNode) {
+      parentNode.insertBefore(
+        get(currentEndNode),
+        get(currentStartNode)
+      );
+      currentEndNode = currentNodes[--currentEnd];
+      futureStartNode = futureNodes[++futureStart];
+    }
+    else {
+      let index = currentNodes.indexOf(futureStartNode);
+      if (index &lt; 0) {
+        parentNode.insertBefore(
+          get(futureStartNode),
+          get(currentStartNode)
+        );
+        futureStartNode = futureNodes[++futureStart];
+      }
+      else {
+        let el = currentNodes[index];
+        // until I am sure the else could never happen
+        // it might be a vDOM thing 'cause it never happens here
+        /* istanbul ignore if */
+        <span class="skip-if-branch" title="if path not taken" >I</span>if (el != futureStartNode) {
+<span class="cstat-skip" title="statement not covered" >          parentNode.insertBefore(</span>
+            get(futureStartNode),
+            get(currentStartNode)
+          );
+        } else {
+          currentNodes[index] = null;
+          parentNode.insertBefore(
+            get(el),
+            get(currentStartNode)
+          );
+        }
+        futureStartNode = futureNodes[++futureStart];
+      }
+    }
+  }
+  if (currentStart &gt; currentEnd) {
+    const pin = futureNodes[futureEnd + 1];
+    const place = pin != null ? get(pin) : before;
+    while (futureStart &lt;= futureEnd) {
+      const ch = futureNodes[futureStart++];
+      // until I am sure the else could never happen
+      // it might be a vDOM thing 'cause it never happens here
+      /* istanbul ignore else */
+      <span class="skip-if-branch" title="else path not taken" >E</span>if (ch != null) parentNode.insertBefore(get(ch), place);
+    }
+  }
+  // until I am sure the else could never happen
+  // it might be a vDOM thing 'cause it never happens here
+  /* istanbul ignore else */
+  else <span class="skip-if-branch" title="else path not taken" >E</span>if (futureStart &gt; futureEnd) {
+    while (currentStart &lt;= currentEnd) {
+      const ch = currentNodes[currentStart++];
+      if (ch != null) parentNode.removeChild(get(ch));
+    }
+  }
+  return futureNodes;
+};
+&nbsp;
+Object.defineProperty(exports, '__esModule', {value: true}).default = domdiff;
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Dec 04 2017 11:48:21 GMT-0200 (-02)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

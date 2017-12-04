@@ -1,0 +1,11 @@
+coverage/*
+esm/.eslintrc
+node_modules/*
+test/*
+_config.yml
+.DS_Store
+.gitignore
+.travis.yml
+babel-plugins.json
+package-lock.json
+rollup.coinfig.js
