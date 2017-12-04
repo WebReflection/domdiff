@@ -1,6 +1,6 @@
 {
   "name": "domdiff",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A fast and simple way to diff childNodes",
   "browser": "min.js",
   "main": "cjs/index.js",
