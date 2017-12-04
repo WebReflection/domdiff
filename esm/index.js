@@ -2,7 +2,7 @@
 
 /**
  * This code is a revisited port of the snabbdom vDOM diffing logic,
- * the same that fuels as fork Vue.js, Preact, and other libraries.
+ * the same that fuels as fork Vue.js, and other libraries.
  * @credits https://github.com/snabbdom/snabbdom
  */
 
