@@ -896,3 +896,5 @@ newState = domdiff(
   [nodes.a, nodes.b, nodes.c, nodes.d, nodes.e, nodes.f].reverse()
 );
 compare(newState, 'fedcba');
+
+tressa.end();

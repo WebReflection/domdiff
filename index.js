@@ -1,4 +1,4 @@
-var domdiff = (function (exports) {
+var domdiff = (function () {
 'use strict';
 
 /*! (c) 2017 Andrea Giammarchi (ISC) */
@@ -59,15 +59,8 @@ beforeNode // optional item/node to use as insertBefore delimiter
         futureStartNode = futureNodes[++futureStart];
       } else {
         var el = currentNodes[index];
-        // until I am sure the else could never happen
-        // it might be a vDOM thing 'cause it never happens here
-        /* istanbul ignore if */
-        if (el != futureStartNode) {
-          parentNode.insertBefore(get(futureStartNode), get(currentStartNode));
-        } else {
-          currentNodes[index] = null;
-          parentNode.insertBefore(get(el), get(currentStartNode));
-        }
+        currentNodes[index] = null;
+        parentNode.insertBefore(get(el), get(currentStartNode));
         futureStartNode = futureNodes[++futureStart];
       }
     }
@@ -77,14 +70,14 @@ beforeNode // optional item/node to use as insertBefore delimiter
     var place = pin != null ? get(pin) : before;
     while (futureStart <= futureEnd) {
       var ch = futureNodes[futureStart++];
-      // until I am sure the else could never happen
-      // it might be a vDOM thing 'cause it never happens here
+      // ignore until I am sure the else could never happen.
+      // it might be a vDOM thing 'cause it never happens here.
       /* istanbul ignore else */
       if (ch != null) parentNode.insertBefore(get(ch), place);
     }
   }
-  // until I am sure the else could never happen
-  // it might be a vDOM thing 'cause it never happens here
+  // ignore until I am sure the else could never happen.
+  // it might be a vDOM thing 'cause it never happens here.
   /* istanbul ignore else */
   else if (futureStart > futureEnd) {
       while (currentStart <= currentEnd) {
@@ -99,4 +92,4 @@ beforeNode // optional item/node to use as insertBefore delimiter
 
 return domdiff;
 
-}({}));
+}());

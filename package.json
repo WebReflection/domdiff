@@ -8,7 +8,7 @@
   "scripts": {
     "build": "npm run cjs && npm run bundle && npm run min && npm run test && npm run size",
     "bundle": "rollup --config rollup.config.js && npm run cleanup",
-    "cleanup": "echo \"$(cat index.js | sed 's/return exports;/return domdiff;/' | sed -e 's/exports.*;//g')\" > index.js",
+    "cleanup": "echo \"$(cat index.js | sed 's/return exports;/return domdiff;/' | sed -e 's/exports.*;//g' | sed 's/exports//' | sed 's/}({}));/}());/')\" > index.js",
     "cjs": "ascjs ./esm ./cjs",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "min": "uglifyjs index.js --support-ie8 --comments=/^!/ -cmo min.js",
