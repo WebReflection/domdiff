@@ -56,3 +56,94 @@ parentNode.textContent;
 ### Compatibility:
 
 Every. JavaScript. Engine.
+
+
+### A `getNode` callback for complex data
+
+The `getNode(item, info)` is invoked per each operation on the DOM.
+
+This can be useful to represent node through wrappers, whenever that is needed.
+
+The passed `info` value can be:
+
+  * `1` when the item/node is being appended
+  * `0` when the item/node is being used as insert _before_ reference
+  * `-0` when the item/node is being used as insert _after_ reference
+  * `-1` when the item/node is being removed
+
+```js
+function getNode(item, i) {
+  // case removal or case after
+  if ((1 / i) < 0) {
+    // case removal
+    if (i) {
+      // if the item has more than a node
+      // remove all other nodes at once
+      if (item.length > 1) {
+        const range = document.createRange();
+        range.setStartBefore(item[1]);
+        range.setEndAfter(item[item.length - 1]);
+        debugger;
+        range.deleteContents();
+      }
+      // return the first node to be removed
+      return item[0];
+    }
+    // case after
+    else {
+      return item[item.length - 1];
+    }
+  }
+  // case insert
+  else if (i) {
+    const fragment = document.createDocumentFragment();
+    fragment.append(...item);
+    return fragment;
+  }
+  // case before
+  else {
+    return item[0];
+  }
+}
+
+const and = [document.createTextNode(' & ')];
+
+const Bob = [
+  document.createTextNode('B'),
+  document.createTextNode('o'),
+  document.createTextNode('b')
+];
+
+const Lucy = [
+  document.createTextNode('L'),
+  document.createTextNode('u'),
+  document.createTextNode('c'),
+  document.createTextNode('y')
+];
+
+// clean the body for demo purpose
+document.body.textContent = '';
+let content = domdiff(
+  document.body,
+  [],
+  [Bob, and, Lucy],
+  getNode
+);
+
+// ... later on ...
+content = domdiff(
+  document.body,
+  content,
+  [Lucy, and, Bob],
+  getNode
+);
+
+// clean up
+domdiff(
+  document.body,
+  content,
+  [],
+  getNode
+);
+
+```
