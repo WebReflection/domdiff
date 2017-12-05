@@ -71,6 +71,8 @@ The passed `info` value can be:
   * `-0` when the item/node is being used as insert _after_ reference
   * `-1` when the item/node is being removed
 
+[Example](https://codepen.io/WebReflection/pen/bYJVPd?editors=0010)
+
 ```js
 function getNode(item, i) {
   // case removal or case after
