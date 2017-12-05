@@ -83,7 +83,6 @@ function getNode(item, i) {
         const range = document.createRange();
         range.setStartBefore(item[1]);
         range.setEndAfter(item[item.length - 1]);
-        debugger;
         range.deleteContents();
       }
       // return the first node to be removed
