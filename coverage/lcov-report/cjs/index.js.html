@@ -22,12 +22,12 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>67/67</span>
+        <span class='fraction'>63/63</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>42/42</span>
+        <span class='fraction'>36/36</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -37,7 +37,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>65/65</span>
+        <span class='fraction'>61/61</span>
       </div>
     </div>
   </div>
@@ -159,11 +159,7 @@
 114
 115
 116
-117
-118
-119
-120
-121</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+117</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -172,7 +168,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">467×</span>
+<span class="cline-any cline-yes">528×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -191,9 +187,7 @@
 <span class="cline-any cline-yes">98×</span>
 <span class="cline-any cline-yes">98×</span>
 <span class="cline-any cline-yes">98×</span>
-<span class="cline-any cline-yes">98×</span>
 <span class="cline-any cline-yes">447×</span>
-<span class="cline-any cline-yes">44×</span>
 <span class="cline-any cline-yes">44×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">403×</span>
@@ -208,7 +202,6 @@
 <span class="cline-any cline-yes">365×</span>
 <span class="cline-any cline-yes">140×</span>
 <span class="cline-any cline-yes">140×</span>
-<span class="cline-any cline-yes">140×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">225×</span>
 <span class="cline-any cline-yes">50×</span>
@@ -219,7 +212,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">52×</span>
 <span class="cline-any cline-yes">52×</span>
 <span class="cline-any cline-yes">52×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -305,7 +297,6 @@ const domdiff = (
   const before = beforeNode == null ? null : get(beforeNode, 0);
   let currentStart = 0, futureStart = 0;
   let currentEnd = currentNodes.length - 1;
-  let currentStartNodeZ = null;
   let currentStartNode = currentNodes[0];
   let currentEndNode = currentNodes[currentEnd];
   let futureEnd = futureNodes.length - 1;
@@ -313,7 +304,6 @@ const domdiff = (
   let futureEndNode = futureNodes[futureEnd];
   while (currentStart &lt;= currentEnd &amp;&amp; futureStart &lt;= futureEnd) {
     if (currentStartNode == null) {
-      currentStartNodeZ = null;
       currentStartNode = currentNodes[++currentStart];
     }
     else if (currentEndNode == null) {
@@ -326,7 +316,6 @@ const domdiff = (
       futureEndNode = futureNodes[--futureEnd];
     }
     else if (currentStartNode == futureStartNode) {
-      currentStartNodeZ = null;
       currentStartNode = currentNodes[++currentStart];
       futureStartNode = futureNodes[++futureStart];
     }
@@ -339,14 +328,13 @@ const domdiff = (
         get(currentStartNode, 1),
         get(currentEndNode, -0).nextSibling
       );
-      currentStartNodeZ = null;
       currentStartNode = currentNodes[++currentStart];
       futureEndNode = futureNodes[--futureEnd];
     }
     else if (currentEndNode == futureStartNode) {
       parentNode.insertBefore(
         get(currentEndNode, 1),
-        currentStartNodeZ || (currentStartNodeZ = get(currentStartNode, 0))
+        get(currentStartNode, 0)
       );
       currentEndNode = currentNodes[--currentEnd];
       futureStartNode = futureNodes[++futureStart];
@@ -356,7 +344,7 @@ const domdiff = (
       if (index &lt; 0) {
         parentNode.insertBefore(
           get(futureStartNode, 1),
-          currentStartNodeZ || (currentStartNodeZ = get(currentStartNode, 0))
+          get(currentStartNode, 0)
         );
         futureStartNode = futureNodes[++futureStart];
       }
@@ -365,7 +353,7 @@ const domdiff = (
         currentNodes[index] = null;
         parentNode.insertBefore(
           get(el, 1),
-          currentStartNodeZ || (currentStartNodeZ = get(currentStartNode, 0))
+          get(currentStartNode, 0)
         );
         futureStartNode = futureNodes[++futureStart];
       }
@@ -409,7 +397,7 @@ Object.defineProperty(exports, '__esModule', {value: true}).default = domdiff;
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Dec 06 2017 13:08:42 GMT-0200 (-02)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Dec 06 2017 13:24:39 GMT-0200 (-02)
 </div>
 </div>
 <script src="../prettify.js"></script>

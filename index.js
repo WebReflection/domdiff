@@ -24,7 +24,6 @@ beforeNode // optional item/node to use as insertBefore delimiter
   var currentStart = 0,
       futureStart = 0;
   var currentEnd = currentNodes.length - 1;
-  var currentStartNodeZ = null;
   var currentStartNode = currentNodes[0];
   var currentEndNode = currentNodes[currentEnd];
   var futureEnd = futureNodes.length - 1;
@@ -32,7 +31,6 @@ beforeNode // optional item/node to use as insertBefore delimiter
   var futureEndNode = futureNodes[futureEnd];
   while (currentStart <= currentEnd && futureStart <= futureEnd) {
     if (currentStartNode == null) {
-      currentStartNodeZ = null;
       currentStartNode = currentNodes[++currentStart];
     } else if (currentEndNode == null) {
       currentEndNode = currentNodes[--currentEnd];
@@ -41,7 +39,6 @@ beforeNode // optional item/node to use as insertBefore delimiter
     } else if (futureEndNode == null) {
       futureEndNode = futureNodes[--futureEnd];
     } else if (currentStartNode == futureStartNode) {
-      currentStartNodeZ = null;
       currentStartNode = currentNodes[++currentStart];
       futureStartNode = futureNodes[++futureStart];
     } else if (currentEndNode == futureEndNode) {
@@ -49,22 +46,21 @@ beforeNode // optional item/node to use as insertBefore delimiter
       futureEndNode = futureNodes[--futureEnd];
     } else if (currentStartNode == futureEndNode) {
       parentNode.insertBefore(get(currentStartNode, 1), get(currentEndNode, -0).nextSibling);
-      currentStartNodeZ = null;
       currentStartNode = currentNodes[++currentStart];
       futureEndNode = futureNodes[--futureEnd];
     } else if (currentEndNode == futureStartNode) {
-      parentNode.insertBefore(get(currentEndNode, 1), currentStartNodeZ || (currentStartNodeZ = get(currentStartNode, 0)));
+      parentNode.insertBefore(get(currentEndNode, 1), get(currentStartNode, 0));
       currentEndNode = currentNodes[--currentEnd];
       futureStartNode = futureNodes[++futureStart];
     } else {
       var index = currentNodes.indexOf(futureStartNode);
       if (index < 0) {
-        parentNode.insertBefore(get(futureStartNode, 1), currentStartNodeZ || (currentStartNodeZ = get(currentStartNode, 0)));
+        parentNode.insertBefore(get(futureStartNode, 1), get(currentStartNode, 0));
         futureStartNode = futureNodes[++futureStart];
       } else {
         var el = currentNodes[index];
         currentNodes[index] = null;
-        parentNode.insertBefore(get(el, 1), currentStartNodeZ || (currentStartNodeZ = get(currentStartNode, 0)));
+        parentNode.insertBefore(get(el, 1), get(currentStartNode, 0));
         futureStartNode = futureNodes[++futureStart];
       }
     }

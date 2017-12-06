@@ -19,7 +19,6 @@ const domdiff = (
   const before = beforeNode == null ? null : get(beforeNode, 0);
   let currentStart = 0, futureStart = 0;
   let currentEnd = currentNodes.length - 1;
-  let currentStartNodeZ = null;
   let currentStartNode = currentNodes[0];
   let currentEndNode = currentNodes[currentEnd];
   let futureEnd = futureNodes.length - 1;
@@ -27,7 +26,6 @@ const domdiff = (
   let futureEndNode = futureNodes[futureEnd];
   while (currentStart <= currentEnd && futureStart <= futureEnd) {
     if (currentStartNode == null) {
-      currentStartNodeZ = null;
       currentStartNode = currentNodes[++currentStart];
     }
     else if (currentEndNode == null) {
@@ -40,7 +38,6 @@ const domdiff = (
       futureEndNode = futureNodes[--futureEnd];
     }
     else if (currentStartNode == futureStartNode) {
-      currentStartNodeZ = null;
       currentStartNode = currentNodes[++currentStart];
       futureStartNode = futureNodes[++futureStart];
     }
@@ -53,14 +50,13 @@ const domdiff = (
         get(currentStartNode, 1),
         get(currentEndNode, -0).nextSibling
       );
-      currentStartNodeZ = null;
       currentStartNode = currentNodes[++currentStart];
       futureEndNode = futureNodes[--futureEnd];
     }
     else if (currentEndNode == futureStartNode) {
       parentNode.insertBefore(
         get(currentEndNode, 1),
-        currentStartNodeZ || (currentStartNodeZ = get(currentStartNode, 0))
+        get(currentStartNode, 0)
       );
       currentEndNode = currentNodes[--currentEnd];
       futureStartNode = futureNodes[++futureStart];
@@ -70,7 +66,7 @@ const domdiff = (
       if (index < 0) {
         parentNode.insertBefore(
           get(futureStartNode, 1),
-          currentStartNodeZ || (currentStartNodeZ = get(currentStartNode, 0))
+          get(currentStartNode, 0)
         );
         futureStartNode = futureNodes[++futureStart];
       }
@@ -79,7 +75,7 @@ const domdiff = (
         currentNodes[index] = null;
         parentNode.insertBefore(
           get(el, 1),
-          currentStartNodeZ || (currentStartNodeZ = get(currentStartNode, 0))
+          get(currentStartNode, 0)
         );
         futureStartNode = futureNodes[++futureStart];
       }
