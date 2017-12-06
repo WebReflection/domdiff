@@ -6,6 +6,7 @@ var clean = function () {
 };
 var compare = function (state, value) {
   assert(
+    state.length === value.length &&
     value.split('').every(function (v, i) {
       return state[i] === nodes[v];
     }),
@@ -121,7 +122,10 @@ newState = domdiff(
 compare(newState, 'ghi');
 
 document.body.insertBefore(nodes.f, nodes.g);
-compare([].slice.call(document.body.childNodes), 'fghi');
+if ('onclick' in document.body) {
+  console.log('browser only');
+  compare([].slice.call(document.body.childNodes), 'fghi');
+}
 
 clean();
 document.body.insertBefore(nodes.k, null);
@@ -896,5 +900,27 @@ newState = domdiff(
   [nodes.a, nodes.b, nodes.c, nodes.d, nodes.e, nodes.f].reverse()
 );
 compare(newState, 'fedcba');
+
+newState = domdiff(
+  document.body,
+  newState,
+  []
+);
+compare(newState, '');
+
+newState = domdiff(
+  document.body,
+  newState,
+  [nodes.a]
+);
+compare(newState, 'a');
+
+newState = domdiff(
+  document.body,
+  newState,
+  []
+);
+compare(newState, '');
+
 
 tressa.end();
