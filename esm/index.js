@@ -19,6 +19,7 @@ const domdiff = (
   const before = beforeNode == null ? null : get(beforeNode, 0);
   let currentStart = 0, futureStart = 0;
   let currentEnd = currentNodes.length - 1;
+  let currentStartNodeZ = null;
   let currentStartNode = currentNodes[0];
   let currentEndNode = currentNodes[currentEnd];
   let futureEnd = futureNodes.length - 1;
@@ -26,6 +27,7 @@ const domdiff = (
   let futureEndNode = futureNodes[futureEnd];
   while (currentStart <= currentEnd && futureStart <= futureEnd) {
     if (currentStartNode == null) {
+      currentStartNodeZ = null;
       currentStartNode = currentNodes[++currentStart];
     }
     else if (currentEndNode == null) {
@@ -38,6 +40,7 @@ const domdiff = (
       futureEndNode = futureNodes[--futureEnd];
     }
     else if (currentStartNode == futureStartNode) {
+      currentStartNodeZ = null;
       currentStartNode = currentNodes[++currentStart];
       futureStartNode = futureNodes[++futureStart];
     }
@@ -50,13 +53,14 @@ const domdiff = (
         get(currentStartNode, 1),
         get(currentEndNode, -0).nextSibling
       );
+      currentStartNodeZ = null;
       currentStartNode = currentNodes[++currentStart];
       futureEndNode = futureNodes[--futureEnd];
     }
     else if (currentEndNode == futureStartNode) {
       parentNode.insertBefore(
         get(currentEndNode, 1),
-        get(currentStartNode, 0)
+        currentStartNodeZ || (currentStartNodeZ = get(currentStartNode, 0))
       );
       currentEndNode = currentNodes[--currentEnd];
       futureStartNode = futureNodes[++futureStart];
@@ -66,7 +70,7 @@ const domdiff = (
       if (index < 0) {
         parentNode.insertBefore(
           get(futureStartNode, 1),
-          get(currentStartNode, 0)
+          currentStartNodeZ || (currentStartNodeZ = get(currentStartNode, 0))
         );
         futureStartNode = futureNodes[++futureStart];
       }
@@ -75,7 +79,7 @@ const domdiff = (
         currentNodes[index] = null;
         parentNode.insertBefore(
           get(el, 1),
-          get(currentStartNode, 0)
+          currentStartNodeZ || (currentStartNodeZ = get(currentStartNode, 0))
         );
         futureStartNode = futureNodes[++futureStart];
       }
@@ -85,40 +89,24 @@ const domdiff = (
     if (futureStart <= futureEnd) {
       const pin = futureNodes[futureEnd + 1];
       const place = pin == null ? before : get(pin, 0);
-      while (futureNodes[futureStart] == null) futureStart++;
-      while (futureNodes[futureEnd] == null) futureEnd--;
-      if (futureStart === futureEnd && futureNodes[futureStart] != null) {
+      if (futureStart === futureEnd) {
         parentNode.insertBefore(get(futureNodes[futureStart], 1), place);
       }
-      // ignore until I am sure the else could never happen.
-      // it might be a vDOM thing 'cause it never happens here.
-      /* istanbul ignore else */
-      else if (futureStart < futureEnd) {
+      else {
         const fragment = parentNode.ownerDocument.createDocumentFragment();
         while (futureStart <= futureEnd) {
-          const node = futureNodes[futureStart++];
-          // ignore until I am sure the else could never happen.
-          // it might be a vDOM thing 'cause it never happens here.
-          /* istanbul ignore else */
-          if (node != null) fragment.appendChild(get(node, 1));
+          fragment.appendChild(get(futureNodes[futureStart++], 1));
         }
         parentNode.insertBefore(fragment, place);
       }
     }
   }
-  // ignore until I am sure the else could never happen.
-  // it might be a vDOM thing 'cause it never happens here.
-  /* istanbul ignore else */
-  else if (futureStart > futureEnd && currentStart <= currentEnd) {
-    while (currentNodes[currentStart] == null) currentStart++;
-    while (currentNodes[currentEnd] == null) currentEnd--;
-    if (currentStart === currentEnd && currentNodes[currentStart] != null) {
+  else {
+    while (currentStart <= currentEnd && currentNodes[currentStart] == null) currentStart++;
+    if (currentStart === currentEnd) {
       parentNode.removeChild(get(currentNodes[currentStart], -1));
     }
-    // ignore until I am sure the else could never happen.
-    // it might be a vDOM thing 'cause it never happens here.
-    /* istanbul ignore else */
-    else if (currentStart < currentEnd) {
+    else {
       const range = parentNode.ownerDocument.createRange();
       range.setStartBefore(get(currentNodes[currentStart], -1));
       range.setEndAfter(get(currentNodes[currentEnd], -1));

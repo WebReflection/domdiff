@@ -1,0 +1,104 @@
+<!doctype html>
+<html>
+  <head>
+    <title>DOM Diff - Bob &amp; Lucy</title>
+    <meta charset="utf-8">
+  </head>
+  <body><div id="demo"></div></body>
+  <script src="../index.js"></script>
+  <script>
+var and = [document.createTextNode(' & ')];
+var bye = [document.createTextNode('The End')];
+
+var Bob = [
+  document.createTextNode('B'),
+  document.createTextNode('o'),
+  document.createTextNode('b')
+];
+
+var Lucy = [
+  document.createTextNode('L'),
+  document.createTextNode('u'),
+  document.createTextNode('c'),
+  document.createTextNode('y')
+];
+
+var content = domdiff(
+  demo,
+  [],
+  [Bob, and, Lucy],
+  getNode
+);
+
+// ... later on ...
+setTimeout(function () {
+  content = domdiff(
+    demo,
+    content,
+    [Lucy, and, Bob],
+    getNode
+  );
+ 
+  // ... later on ...
+  setTimeout(function () {
+    content = domdiff(
+      demo,
+      content,
+      [bye],
+      getNode
+    );
+
+    // ... and last clean up ...
+    setTimeout(function () {
+      content = domdiff(
+        demo,
+        content,
+        [],
+        getNode
+      );
+    }, 1000);
+
+  }, 1000);
+
+}, 1000);
+
+// in this demo case, getNode is
+// assumig every item is an Array
+function getNode(item, i) {
+  // case removal or case after
+  if ((1 / i) < 0) {
+    // case removal
+    if (i) {
+      // if the item has more than a node
+      // remove all other nodes at once
+      if (item.length > 1) {
+        var range = document.createRange();
+        range.setStartBefore(item[1]);
+        range.setEndAfter(item[item.length - 1]);
+        range.deleteContents();
+      }
+      // return the first node to be removed
+      return item[0];
+    }
+    // case after
+    else {
+      return item[item.length - 1];
+    }
+  }
+  // case insert
+  else if (i) {
+    return item.reduce(
+      function (f, n) {
+        f.appendChild(n);
+        return f;
+      },
+      document.createDocumentFragment()
+    );
+  }
+  // case before
+  else {
+    return item[0];
+  }
+}
+  </script>
+</html>

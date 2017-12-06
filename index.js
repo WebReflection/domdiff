@@ -24,6 +24,7 @@ beforeNode // optional item/node to use as insertBefore delimiter
   var currentStart = 0,
       futureStart = 0;
   var currentEnd = currentNodes.length - 1;
+  var currentStartNodeZ = null;
   var currentStartNode = currentNodes[0];
   var currentEndNode = currentNodes[currentEnd];
   var futureEnd = futureNodes.length - 1;
@@ -31,6 +32,7 @@ beforeNode // optional item/node to use as insertBefore delimiter
   var futureEndNode = futureNodes[futureEnd];
   while (currentStart <= currentEnd && futureStart <= futureEnd) {
     if (currentStartNode == null) {
+      currentStartNodeZ = null;
       currentStartNode = currentNodes[++currentStart];
     } else if (currentEndNode == null) {
       currentEndNode = currentNodes[--currentEnd];
@@ -39,6 +41,7 @@ beforeNode // optional item/node to use as insertBefore delimiter
     } else if (futureEndNode == null) {
       futureEndNode = futureNodes[--futureEnd];
     } else if (currentStartNode == futureStartNode) {
+      currentStartNodeZ = null;
       currentStartNode = currentNodes[++currentStart];
       futureStartNode = futureNodes[++futureStart];
     } else if (currentEndNode == futureEndNode) {
@@ -46,21 +49,22 @@ beforeNode // optional item/node to use as insertBefore delimiter
       futureEndNode = futureNodes[--futureEnd];
     } else if (currentStartNode == futureEndNode) {
       parentNode.insertBefore(get(currentStartNode, 1), get(currentEndNode, -0).nextSibling);
+      currentStartNodeZ = null;
       currentStartNode = currentNodes[++currentStart];
       futureEndNode = futureNodes[--futureEnd];
     } else if (currentEndNode == futureStartNode) {
-      parentNode.insertBefore(get(currentEndNode, 1), get(currentStartNode, 0));
+      parentNode.insertBefore(get(currentEndNode, 1), currentStartNodeZ || (currentStartNodeZ = get(currentStartNode, 0)));
       currentEndNode = currentNodes[--currentEnd];
       futureStartNode = futureNodes[++futureStart];
     } else {
       var index = currentNodes.indexOf(futureStartNode);
       if (index < 0) {
-        parentNode.insertBefore(get(futureStartNode, 1), get(currentStartNode, 0));
+        parentNode.insertBefore(get(futureStartNode, 1), currentStartNodeZ || (currentStartNodeZ = get(currentStartNode, 0)));
         futureStartNode = futureNodes[++futureStart];
       } else {
         var el = currentNodes[index];
         currentNodes[index] = null;
-        parentNode.insertBefore(get(el, 1), get(currentStartNode, 0));
+        parentNode.insertBefore(get(el, 1), currentStartNodeZ || (currentStartNodeZ = get(currentStartNode, 0)));
         futureStartNode = futureNodes[++futureStart];
       }
     }
@@ -69,50 +73,28 @@ beforeNode // optional item/node to use as insertBefore delimiter
     if (futureStart <= futureEnd) {
       var pin = futureNodes[futureEnd + 1];
       var place = pin == null ? before : get(pin, 0);
-      while (futureNodes[futureStart] == null) {
-        futureStart++;
-      }while (futureNodes[futureEnd] == null) {
-        futureEnd--;
-      }if (futureStart === futureEnd && futureNodes[futureStart] != null) {
+      if (futureStart === futureEnd) {
         parentNode.insertBefore(get(futureNodes[futureStart], 1), place);
-      }
-      // ignore until I am sure the else could never happen.
-      // it might be a vDOM thing 'cause it never happens here.
-      /* istanbul ignore else */
-      else if (futureStart < futureEnd) {
-          var fragment = parentNode.ownerDocument.createDocumentFragment();
-          while (futureStart <= futureEnd) {
-            var node = futureNodes[futureStart++];
-            // ignore until I am sure the else could never happen.
-            // it might be a vDOM thing 'cause it never happens here.
-            /* istanbul ignore else */
-            if (node != null) fragment.appendChild(get(node, 1));
-          }
-          parentNode.insertBefore(fragment, place);
+      } else {
+        var fragment = parentNode.ownerDocument.createDocumentFragment();
+        while (futureStart <= futureEnd) {
+          fragment.appendChild(get(futureNodes[futureStart++], 1));
         }
+        parentNode.insertBefore(fragment, place);
+      }
+    }
+  } else {
+    while (currentStart <= currentEnd && currentNodes[currentStart] == null) {
+      currentStart++;
+    }if (currentStart === currentEnd) {
+      parentNode.removeChild(get(currentNodes[currentStart], -1));
+    } else {
+      var range = parentNode.ownerDocument.createRange();
+      range.setStartBefore(get(currentNodes[currentStart], -1));
+      range.setEndAfter(get(currentNodes[currentEnd], -1));
+      range.deleteContents();
     }
   }
-  // ignore until I am sure the else could never happen.
-  // it might be a vDOM thing 'cause it never happens here.
-  /* istanbul ignore else */
-  else if (futureStart > futureEnd && currentStart <= currentEnd) {
-      while (currentNodes[currentStart] == null) {
-        currentStart++;
-      }while (currentNodes[currentEnd] == null) {
-        currentEnd--;
-      }if (currentStart === currentEnd && currentNodes[currentStart] != null) {
-        parentNode.removeChild(get(currentNodes[currentStart], -1));
-      }
-      // ignore until I am sure the else could never happen.
-      // it might be a vDOM thing 'cause it never happens here.
-      /* istanbul ignore else */
-      else if (currentStart < currentEnd) {
-          var range = parentNode.ownerDocument.createRange();
-          range.setStartBefore(get(currentNodes[currentStart], -1));
-          range.setEndAfter(get(currentNodes[currentEnd], -1));
-          range.deleteContents();
-        }
-    }
   return futureNodes;
 };
 
