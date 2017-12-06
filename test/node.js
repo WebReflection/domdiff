@@ -12,6 +12,23 @@ global.document = {
     );
   },
   body: {
+    ownerDocument: {
+      createDocumentFragment: function () {
+        var cn = [];
+        return {
+          appendChild: function (node) {
+            cn.push(node);
+          }
+        };
+      },
+      createRange: function () {
+        return {
+          setStartBefore: function () {},
+          setEndAfter: function () {},
+          deleteContents: function () {}
+        };
+      }
+    },
     childNodes: [],
     insertBefore: function (before, after) {
       var cn = this.childNodes;
