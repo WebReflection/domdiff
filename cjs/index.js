@@ -99,7 +99,7 @@ const domdiff = (
     }
   }
   else {
-    while (currentStart <= currentEnd && currentNodes[currentStart] == null) currentStart++;
+    if (currentNodes[currentStart] == null) currentStart++;
     if (currentStart === currentEnd) {
       parentNode.removeChild(get(currentNodes[currentStart], -1));
     }

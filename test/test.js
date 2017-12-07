@@ -405,6 +405,33 @@ compare(newState, 'abc');
 newState = domdiff(
   document.body,
   newState,
+  [nodes.b, nodes.c, nodes.a, nodes.d],
+  null,
+  nodes.k
+);
+compare(newState, 'bcad');
+
+newState = domdiff(
+  document.body,
+  newState,
+  [nodes.c, nodes.b, nodes.d],
+  null,
+  nodes.k
+);
+compare(newState, 'cbd');
+
+newState = domdiff(
+  document.body,
+  newState,
+  [nodes.a, nodes.b, nodes.c],
+  null,
+  nodes.k
+);
+compare(newState, 'abc');
+
+newState = domdiff(
+  document.body,
+  newState,
   [nodes.b, nodes.c, nodes.a],
   null,
   nodes.k
@@ -904,13 +931,6 @@ compare(newState, 'fedcba');
 newState = domdiff(
   document.body,
   newState,
-  []
-);
-compare(newState, '');
-
-newState = domdiff(
-  document.body,
-  newState,
   [nodes.a]
 );
 compare(newState, 'a');
@@ -918,9 +938,16 @@ compare(newState, 'a');
 newState = domdiff(
   document.body,
   newState,
-  []
+  [nodes.b, nodes.c, nodes.d]
 );
-compare(newState, '');
+compare(newState, 'bcd');
+
+newState = domdiff(
+  document.body,
+  newState,
+  [nodes.a]
+);
+compare(newState, 'a');
 
 
 tressa.end();

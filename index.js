@@ -80,9 +80,8 @@ beforeNode // optional item/node to use as insertBefore delimiter
       }
     }
   } else {
-    while (currentStart <= currentEnd && currentNodes[currentStart] == null) {
-      currentStart++;
-    }if (currentStart === currentEnd) {
+    if (currentNodes[currentStart] == null) currentStart++;
+    if (currentStart === currentEnd) {
       parentNode.removeChild(get(currentNodes[currentStart], -1));
     } else {
       var range = parentNode.ownerDocument.createRange();
