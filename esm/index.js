@@ -81,8 +81,8 @@ const domdiff = (
       }
     }
   }
-  if (currentStart > currentEnd) {
-    if (futureStart <= futureEnd) {
+  if (currentStart <= currentEnd || futureStart <= futureEnd) {
+    if (currentStart > currentEnd) {
       const pin = futureNodes[futureEnd + 1];
       const place = pin == null ? before : get(pin, 0);
       if (futureStart === futureEnd) {
@@ -96,17 +96,17 @@ const domdiff = (
         parentNode.insertBefore(fragment, place);
       }
     }
-  }
-  else {
-    if (currentNodes[currentStart] == null) currentStart++;
-    if (currentStart === currentEnd) {
-      parentNode.removeChild(get(currentNodes[currentStart], -1));
-    }
     else {
-      const range = parentNode.ownerDocument.createRange();
-      range.setStartBefore(get(currentNodes[currentStart], -1));
-      range.setEndAfter(get(currentNodes[currentEnd], -1));
-      range.deleteContents();
+      if (currentNodes[currentStart] == null) currentStart++;
+      if (currentStart === currentEnd) {
+        parentNode.removeChild(get(currentNodes[currentStart], -1));
+      }
+      else {
+        const range = parentNode.ownerDocument.createRange();
+        range.setStartBefore(get(currentNodes[currentStart], -1));
+        range.setEndAfter(get(currentNodes[currentEnd], -1));
+        range.deleteContents();
+      }
     }
   }
   return futureNodes;
