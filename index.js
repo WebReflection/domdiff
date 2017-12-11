@@ -79,7 +79,9 @@ beforeNode // optional item/node to use as insertBefore delimiter
         parentNode.insertBefore(fragment, place);
       }
     } else {
-      if (currentNodes[currentStart] == null) currentStart++;
+      // TODO: this case never happens but it was previously essential.
+      //       anything to further investigate?
+      // if (currentNodes[currentStart] == null) currentStart++;
       if (currentStart === currentEnd) {
         parentNode.removeChild(get(currentNodes[currentStart], -1));
       } else {
