@@ -8,4 +8,4 @@ _config.yml
 .travis.yml
 babel-plugins.json
 package-lock.json
-rollup.coinfig.js
+rollup.config.js
