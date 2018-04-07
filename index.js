@@ -13,6 +13,13 @@ var identity = function identity(O) {
   return O;
 };
 
+var remove = function remove(parentNode, before, after) {
+  var range = parentNode.ownerDocument.createRange();
+  range.setStartBefore(before);
+  range.setEndAfter(after);
+  range.deleteContents();
+};
+
 var domdiff = function domdiff(parentNode, // where changes happen
 currentNodes, // Array of current items/nodes
 futureNodes, // Array of future items/nodes
@@ -58,10 +65,28 @@ beforeNode // optional item/node to use as insertBefore delimiter
         parentNode.insertBefore(get(futureStartNode, 1), get(currentStartNode, 0));
         futureStartNode = futureNodes[++futureStart];
       } else {
-        var el = currentNodes[index];
-        currentNodes[index] = null;
-        parentNode.insertBefore(get(el, 1), get(currentStartNode, 0));
-        futureStartNode = futureNodes[++futureStart];
+        var i = index;
+        var f = futureStart;
+        while (i <= currentEnd && f <= futureEnd && currentNodes[i] === futureNodes[f]) {
+          i++;
+          f++;
+        }
+        if (1 < i - index) {
+          if (--index === currentStart) {
+            parentNode.removeChild(get(currentStartNode, -1));
+          } else {
+            remove(parentNode, get(currentStartNode, -1), get(currentNodes[index], -1));
+          }
+          currentStart = i;
+          futureStart = f;
+          currentStartNode = currentNodes[i];
+          futureStartNode = futureNodes[f];
+        } else {
+          var el = currentNodes[index];
+          currentNodes[index] = null;
+          parentNode.insertBefore(get(el, 1), get(currentStartNode, 0));
+          futureStartNode = futureNodes[++futureStart];
+        }
       }
     }
   }
@@ -83,10 +108,7 @@ beforeNode // optional item/node to use as insertBefore delimiter
       if (currentStart === currentEnd) {
         parentNode.removeChild(get(currentNodes[currentStart], -1));
       } else {
-        var range = parentNode.ownerDocument.createRange();
-        range.setStartBefore(get(currentNodes[currentStart], -1));
-        range.setEndAfter(get(currentNodes[currentEnd], -1));
-        range.deleteContents();
+        remove(parentNode, get(currentNodes[currentStart], -1), get(currentNodes[currentEnd], -1));
       }
     }
   }
