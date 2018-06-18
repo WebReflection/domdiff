@@ -949,5 +949,41 @@ newState = domdiff(
 );
 compare(newState, 'a');
 
+newState = domdiff(
+  document.body,
+  newState,
+  []
+);
+
+var data = [
+  {"id": 4054, "title": "Serie 2"},
+  {"id": 3982, "title": "Serie 3"},
+  {"id": 4016, "title": "Gracias"},
+  {"id":3984, "title": "Comparte"},
+  {"id":3952, "title": "Lección 1"},
+  {"id":3955, "title": "Lección 2"}
+];
+
+var wm = new WeakMap;
+
+var getItem = function (item) { return wm.get(item); };
+
+data.forEach(function (item) {
+  wm.set(item, document.createTextNode(item.id + ': ' + item.title));
+});
+
+newState = domdiff(
+  document.body,
+  newState,
+  data.slice().map(getItem)
+);
+
+newState = domdiff(
+  document.body,
+  newState,
+  data.slice().sort(function (a, b) {
+    return a.title.localeCompare(b.title);
+  }).map(getItem)
+);
 
 tressa.end();
