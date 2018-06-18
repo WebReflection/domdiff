@@ -964,12 +964,12 @@ var data = [
   {"id":3955, "title": "Lección 2"}
 ];
 
-var wm = new WeakMap;
+var wm = {};
 
-var getItem = function (item) { return wm.get(item); };
+var getItem = function (item) { return wm[item.id]; };
 
 data.forEach(function (item) {
-  wm.set(item, document.createTextNode(item.id + ': ' + item.title));
+  wm[item.id] = document.createTextNode(item.id + ': ' + item.title);
 });
 
 newState = domdiff(
