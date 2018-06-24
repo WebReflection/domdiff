@@ -5,6 +5,10 @@
 
 A vDOM-less implementation of the [snabbdom](https://github.com/snabbdom/snabbdom) diffing logic.
 
+#### V1 breaking change
+
+The signature has moved from `parent, current[], future[], getNode(), beforeNode` to `parent, current[], future[], {before, compare(), node()}`.
+
 
 ### Signature
 
@@ -13,8 +17,10 @@ futureNodes = domdiff(
   parentNode,     // where changes happen
   currentNodes,   // Array of current items/nodes
   futureNodes,    // Array of future items/nodes (returned)
-  getNode,        // optional way to retrieve a node from an item
-  beforeNode      // optional item/node to use as insertBefore delimiter
+  options         // optional object with one of the following properties
+                  //  before: domNode
+                  //  compare(generic, generic) => true if same generic
+                  //  node(generic) => Node
 );
 ```
 
@@ -58,9 +64,9 @@ parentNode.textContent;
 Every. JavaScript. Engine.
 
 
-### A `getNode` callback for complex data
+### A `{node: (generic, info) => node}` callback for complex data
 
-The `getNode(item, info)` is invoked per each operation on the DOM.
+The optional `{node: (generic, info) => node}` is invoked per each operation on the DOM.
 
 This can be useful to represent node through wrappers, whenever that is needed.
 
@@ -74,7 +80,7 @@ The passed `info` value can be:
 [Example](https://codepen.io/WebReflection/pen/bYJVPd?editors=0010)
 
 ```js
-function getNode(item, i) {
+function node(item, i) {
   // case removal or case after
   if ((1 / i) < 0) {
     // case removal
@@ -128,7 +134,7 @@ let content = domdiff(
   document.body,
   [],
   [Bob, and, Lucy],
-  getNode
+  {node}
 );
 
 // ... later on ...
@@ -136,7 +142,7 @@ content = domdiff(
   document.body,
   content,
   [Lucy, and, Bob],
-  getNode
+  {node}
 );
 
 // clean up
@@ -144,7 +150,7 @@ domdiff(
   document.body,
   content,
   [],
-  getNode
+  {node}
 );
 
 ```

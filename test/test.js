@@ -107,7 +107,7 @@ newState = domdiff(
     nodes.g, nodes.h, nodes.i,
     nodes.j, nodes.k
   ],
-  Object
+  {node: Object, compare: (a, b) => a === b}
 );
 compare(newState, 'abcdefghijk');
 
@@ -117,7 +117,7 @@ newState = domdiff(
   [
     nodes.g, nodes.h, nodes.i
   ],
-  Object
+  {node: Object}
 );
 compare(newState, 'ghi');
 
@@ -135,8 +135,7 @@ newState = domdiff(
   [
     nodes.c, nodes.d, nodes.e
   ],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'cde');
 
@@ -146,8 +145,7 @@ newState = domdiff(
   [
     null, nodes.c, nodes.d, nodes.e, null
   ],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState.filter(notNull), 'cde');
 
@@ -157,8 +155,7 @@ newState = domdiff(
   [
     nodes.a, nodes.c, null, nodes.e, nodes.f
   ],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState.filter(notNull), 'acef');
 
@@ -170,8 +167,7 @@ newState = domdiff(
     nodes.c, nodes.d, nodes.e,
     nodes.g, nodes.h, nodes.i
   ],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'cdeghi');
 
@@ -183,8 +179,7 @@ newState = domdiff(
     nodes.d, nodes.e, nodes.f,
     nodes.g, nodes.h, nodes.i
   ],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'abcdefghi');
 
@@ -196,8 +191,7 @@ newState = domdiff(
     nodes.d, nodes.e, nodes.f,
     nodes.g, nodes.i, nodes.h
   ],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'bacdefgih');
 
@@ -205,8 +199,7 @@ newState = domdiff(
   document.body,
   newState,
   [],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, '');
 
@@ -216,8 +209,7 @@ newState = domdiff(
   document.body,
   newState,
   [nodes.a],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'a');
 
@@ -225,8 +217,7 @@ newState = domdiff(
   document.body,
   newState,
   [nodes.a, nodes.b, nodes.c],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'abc');
 
@@ -234,8 +225,7 @@ newState = domdiff(
   document.body,
   newState,
   [nodes.d, nodes.e],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'de');
 
@@ -243,8 +233,7 @@ newState = domdiff(
   document.body,
   newState,
   [nodes.a, nodes.b, nodes.c, nodes.d, nodes.e],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'abcde');
 
@@ -252,8 +241,7 @@ newState = domdiff(
   document.body,
   newState,
   [nodes.a, nodes.b, nodes.d, nodes.e],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'abde');
 
@@ -261,8 +249,7 @@ newState = domdiff(
   document.body,
   newState,
   [nodes.a, nodes.b, nodes.c, nodes.d, nodes.e],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'abcde');
 
@@ -270,8 +257,7 @@ newState = domdiff(
   document.body,
   newState,
   [nodes.b, nodes.c, nodes.d],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'bcd');
 
@@ -279,8 +265,7 @@ newState = domdiff(
   document.body,
   newState,
   [nodes.a, nodes.b, nodes.c, nodes.d, nodes.e],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'abcde');
 
@@ -288,8 +273,7 @@ newState = domdiff(
   document.body,
   newState,
   [],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, '');
 
@@ -297,8 +281,7 @@ newState = domdiff(
   document.body,
   newState,
   [nodes.a, nodes.b, nodes.c],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'abc');
 
@@ -306,8 +289,7 @@ newState = domdiff(
   document.body,
   newState,
   [nodes.a, document.createTextNode('b'), nodes.c],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 assert(
   newState[1] !== nodes.b &&
@@ -323,8 +305,7 @@ newState = domdiff(
   document.body,
   newState,
   [nodes.a, nodes.b, nodes.c, nodes.d, nodes.e],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'abcde');
 
@@ -332,8 +313,7 @@ newState = domdiff(
   document.body,
   newState,
   [nodes.c, nodes.d, nodes.e],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'cde');
 
@@ -341,8 +321,7 @@ newState = domdiff(
   document.body,
   newState,
   [nodes.a, nodes.b, nodes.c, nodes.d, nodes.e],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'abcde');
 
@@ -350,8 +329,7 @@ newState = domdiff(
   document.body,
   newState,
   [nodes.a, nodes.b, nodes.c],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'abc');
 
@@ -359,8 +337,7 @@ newState = domdiff(
   document.body,
   newState,
   [nodes.a, nodes.b, nodes.c, nodes.d, nodes.e],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'abcde');
 
@@ -368,8 +345,7 @@ newState = domdiff(
   document.body,
   newState,
   [nodes.a, nodes.b, nodes.d, nodes.e],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'abde');
 
@@ -379,8 +355,7 @@ newState = domdiff(
   document.body,
   newState,
   [nodes.a, nodes.b, nodes.c, nodes.d],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'abcd');
 
@@ -388,8 +363,7 @@ newState = domdiff(
   document.body,
   newState,
   [nodes.b, nodes.c, nodes.a, nodes.d],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'bcad');
 
@@ -397,8 +371,7 @@ newState = domdiff(
   document.body,
   newState,
   [nodes.a, nodes.b, nodes.c],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'abc');
 
@@ -406,8 +379,7 @@ newState = domdiff(
   document.body,
   newState,
   [nodes.b, nodes.c, nodes.a, nodes.d],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'bcad');
 
@@ -415,8 +387,7 @@ newState = domdiff(
   document.body,
   newState,
   [nodes.c, nodes.b, nodes.d],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'cbd');
 
@@ -424,8 +395,7 @@ newState = domdiff(
   document.body,
   newState,
   [nodes.a, nodes.b, nodes.c],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'abc');
 
@@ -433,8 +403,7 @@ newState = domdiff(
   document.body,
   newState,
   [nodes.b, nodes.c, nodes.a],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'bca');
 
@@ -442,8 +411,7 @@ newState = domdiff(
   document.body,
   newState,
   [nodes.a, nodes.b, nodes.c, nodes.d],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'abcd');
 
@@ -451,8 +419,7 @@ newState = domdiff(
   document.body,
   newState,
   [nodes.a, nodes.d, nodes.b, nodes.c],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'adbc');
 
@@ -460,8 +427,7 @@ newState = domdiff(
   document.body,
   newState,
   [nodes.a, nodes.d, nodes.b, nodes.c],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'adbc');
 
@@ -471,8 +437,7 @@ newState = domdiff(
   document.body,
   newState,
   [nodes.a, nodes.b, nodes.c, nodes.d, nodes.e],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'abcde');
 
@@ -480,8 +445,7 @@ newState = domdiff(
   document.body,
   newState,
   [nodes.d, nodes.a, nodes.b, nodes.c, nodes.f],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'dabcf');
 
@@ -489,8 +453,7 @@ newState = domdiff(
   document.body,
   newState,
   [nodes.a, nodes.d, nodes.e],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'ade');
 
@@ -498,8 +461,7 @@ newState = domdiff(
   document.body,
   newState,
   [nodes.d, nodes.f],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'df');
 
@@ -507,8 +469,7 @@ newState = domdiff(
   document.body,
   newState,
   [nodes.b, nodes.d, nodes.e],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'bde');
 
@@ -516,8 +477,7 @@ newState = domdiff(
   document.body,
   newState,
   [nodes.d, nodes.e, nodes.c],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'dec');
 
@@ -525,8 +485,7 @@ newState = domdiff(
   document.body,
   newState,
   [nodes.j, nodes.a, nodes.b, nodes.c],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'jabc');
 
@@ -534,8 +493,7 @@ newState = domdiff(
   document.body,
   newState,
   [nodes.d, nodes.a, nodes.b, nodes.c, nodes.j, nodes.e],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'dabcje');
 
@@ -543,8 +501,7 @@ newState = domdiff(
   document.body,
   newState,
   [nodes.a, nodes.b, nodes.c, nodes.d, nodes.e, nodes.f, nodes.g, nodes.h],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'abcdefgh');
 
@@ -552,8 +509,7 @@ newState = domdiff(
   document.body,
   newState,
   [nodes.a, nodes.b, nodes.c, nodes.d, nodes.e, nodes.f, nodes.g, nodes.h].reverse(),
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'hgfedcba');
 
@@ -561,8 +517,7 @@ newState = domdiff(
   document.body,
   newState,
   [nodes.a, nodes.b, nodes.c, nodes.d, nodes.e, nodes.f],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'abcdef');
 
@@ -570,8 +525,7 @@ newState = domdiff(
   document.body,
   newState,
   [nodes.e, nodes.d, nodes.c, nodes.b, nodes.f, nodes.a],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'edcbfa');
 
@@ -581,8 +535,7 @@ newState = domdiff(
   document.body,
   newState,
   [nodes.a, nodes.b, nodes.c, nodes.d, nodes.e, nodes.f],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'abcdef');
 
@@ -590,8 +543,7 @@ newState = domdiff(
   document.body,
   newState,
   [null, nodes.c, undefined, null, nodes.b, nodes.a, null, nodes.f, nodes.e, null, nodes.d, undefined],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState.filter(notNull), 'cbafed');
 
@@ -599,8 +551,7 @@ newState = domdiff(
   document.body,
   newState,
   [nodes.a, nodes.b, nodes.c, nodes.d, nodes.e, nodes.f],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'abcdef');
 
@@ -608,8 +559,7 @@ newState = domdiff(
   document.body,
   newState,
   [null, null, undefined, null, null, undefined],
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState.filter(notNull), '');
 
@@ -617,8 +567,7 @@ newState = domdiff(
   document.body,
   newState,
   [nodes.a, nodes.b, nodes.c, nodes.d, nodes.e, nodes.f].reverse(),
-  null,
-  nodes.k
+  {before: nodes.k}
 );
 compare(newState, 'fedcba');
 
