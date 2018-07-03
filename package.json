@@ -2,7 +2,7 @@
   "name": "domdiff",
   "version": "1.0.0",
   "description": "A fast and simple way to diff childNodes",
-  "browser": "min.js",
+  "unpkg": "min.js",
   "main": "cjs/index.js",
   "module": "esm/index.js",
   "scripts": {
