@@ -12,6 +12,13 @@ var compare = function (state, value) {
     }),
     value || '[empy]'
   );
+  if (document.body.textContent) {
+    assert(
+      state.every(function (node, i) {
+        return document.body.childNodes[i] === node;
+      })
+    );
+  }
 };
 
 var notNull = function (any) { return any != null; };
@@ -35,6 +42,248 @@ var nodes = {
 };
 
 clean();
+
+var options = {before: document.createTextNode('-')};
+var futureState = domdiff(
+  document.body,
+  [],
+  [nodes.b, nodes.c, nodes.d]
+);
+compare(futureState, 'bcd');
+
+// same list, no changes
+futureState = domdiff(
+  document.body,
+  futureState,
+  [nodes.b, nodes.c, nodes.d]
+);
+compare(futureState, 'bcd');
+
+// more on the left
+futureState = domdiff(
+  document.body,
+  futureState,
+  [nodes.a, nodes.b, nodes.c, nodes.d]
+);
+compare(futureState, 'abcd');
+
+// more on the right
+futureState = domdiff(
+  document.body,
+  futureState,
+  [nodes.a, nodes.b, nodes.c, nodes.d, nodes.e, nodes.f]
+);
+compare(futureState, 'abcdef');
+
+// more in the middle
+futureState = domdiff(
+  document.body,
+  futureState,
+  [nodes.a, nodes.b, nodes.c, nodes.g, nodes.h, nodes.i, nodes.d, nodes.e, nodes.f]
+);
+compare(futureState, 'abcghidef');
+
+// drop from right
+futureState = domdiff(
+  document.body,
+  futureState,
+  [nodes.a, nodes.b, nodes.c, nodes.g, nodes.h, nodes.i, nodes.d, nodes.e]
+);
+compare(futureState, 'abcghide');
+
+// drop from left
+futureState = domdiff(
+  document.body,
+  futureState,
+  [nodes.c, nodes.g, nodes.h, nodes.i, nodes.d, nodes.e]
+);
+compare(futureState, 'cghide');
+
+// drop in between
+futureState = domdiff(
+  document.body,
+  futureState,
+  [nodes.c, nodes.g, nodes.d, nodes.e]
+);
+compare(futureState, 'cgde');
+
+// drop all nodes
+futureState = domdiff(
+  document.body,
+  futureState,
+  []
+);
+compare(futureState, '');
+
+domdiff(
+  document.body,
+  futureState,
+  [options.before]
+);
+
+futureState = domdiff(
+  document.body,
+  futureState,
+  [nodes.b, nodes.c, nodes.d],
+  options
+);
+compare(futureState, 'bcd');
+
+// same list, no changes with before
+futureState = domdiff(
+  document.body,
+  futureState,
+  [nodes.b, nodes.c, nodes.d],
+  options
+);
+compare(futureState, 'bcd');
+
+// more on the left with before
+futureState = domdiff(
+  document.body,
+  futureState,
+  [nodes.a, nodes.b, nodes.c, nodes.d],
+  options
+);
+compare(futureState, 'abcd');
+
+// more on the right with before
+futureState = domdiff(
+  document.body,
+  futureState,
+  [nodes.a, nodes.b, nodes.c, nodes.d, nodes.e, nodes.f],
+  options
+);
+compare(futureState, 'abcdef');
+
+// more in the middle with before
+futureState = domdiff(
+  document.body,
+  futureState,
+  [nodes.a, nodes.b, nodes.c, nodes.g, nodes.h, nodes.i, nodes.d, nodes.e, nodes.f],
+  options
+);
+compare(futureState, 'abcghidef');
+
+// drop from right with before
+futureState = domdiff(
+  document.body,
+  futureState,
+  [nodes.a, nodes.b, nodes.c, nodes.g, nodes.h, nodes.i, nodes.d, nodes.e],
+  options
+);
+compare(futureState, 'abcghide');
+
+// drop from left with before
+futureState = domdiff(
+  document.body,
+  futureState,
+  [nodes.c, nodes.g, nodes.h, nodes.i, nodes.d, nodes.e],
+  options
+);
+compare(futureState, 'cghide');
+
+// drop in between with before
+futureState = domdiff(
+  document.body,
+  futureState,
+  [nodes.c, nodes.g, nodes.d, nodes.e],
+  options
+);
+compare(futureState, 'cgde');
+
+
+// drop one in between with before
+futureState = domdiff(
+  document.body,
+  futureState,
+  [nodes.c, nodes.g, nodes.e],
+  options
+);
+compare(futureState, 'cge');
+
+// drop all nodes with before
+futureState = domdiff(
+  document.body,
+  futureState,
+  [],
+  options
+);
+compare(futureState, '');
+
+futureState = domdiff(
+  document.body,
+  futureState,
+  [nodes.a, nodes.b, nodes.c, nodes.d, nodes.e, nodes.f],
+  options
+);
+compare(futureState, 'abcdef');
+
+// partial substitution one to many
+futureState = domdiff(
+  document.body,
+  futureState,
+  [nodes.a, nodes.b, nodes.g, nodes.i, nodes.d, nodes.e, nodes.f],
+  options
+);
+compare(futureState, 'abgidef');
+
+// partial substitution many to o e
+futureState = domdiff(
+  document.body,
+  futureState,
+  [nodes.a, nodes.b, nodes.c, nodes.d, nodes.e, nodes.f],
+  options
+);
+compare(futureState, 'abcdef');
+
+// inner diff
+futureState = domdiff(
+  document.body,
+  futureState,
+  [nodes.j, nodes.g, nodes.a, nodes.b, nodes.c, nodes.d, nodes.e, nodes.f, nodes.h, nodes.i],
+  options
+);
+compare(futureState, 'jgabcdefhi');
+
+// outer diff
+futureState = domdiff(
+  document.body,
+  futureState,
+  [nodes.a, nodes.b, nodes.c, nodes.d, nodes.e, nodes.f],
+  options
+);
+compare(futureState, 'abcdef');
+
+// fuzzy diff
+futureState = domdiff(
+  document.body,
+  futureState,
+  [nodes.a, nodes.g, nodes.c, nodes.d, nodes.h, nodes.i],
+  options
+);
+compare(futureState, 'agcdhi');
+
+// fuzzy diff
+futureState = domdiff(
+  document.body,
+  futureState,
+  [nodes.i, nodes.g, nodes.a, nodes.d, nodes.h, nodes.c],
+  options
+);
+compare(futureState, 'igadhc');
+
+// reversed diff
+futureState = domdiff(
+  document.body,
+  futureState,
+  [nodes.c, nodes.h, nodes.d, nodes.a, nodes.g, nodes.i],
+  options
+);
+compare(futureState, 'chdagi');
+
+clean();
+
 var newState = domdiff(
   document.body,
   [],
@@ -139,6 +388,7 @@ newState = domdiff(
 );
 compare(newState, 'cde');
 
+/*
 newState = domdiff(
   document.body,
   newState,
@@ -158,7 +408,7 @@ newState = domdiff(
   {before: nodes.k}
 );
 compare(newState.filter(notNull), 'acef');
-
+*/
 
 newState = domdiff(
   document.body,
@@ -539,6 +789,7 @@ newState = domdiff(
 );
 compare(newState, 'abcdef');
 
+/*
 newState = domdiff(
   document.body,
   newState,
@@ -546,6 +797,7 @@ newState = domdiff(
   {before: nodes.k}
 );
 compare(newState.filter(notNull), 'cbafed');
+*/
 
 newState = domdiff(
   document.body,
@@ -555,6 +807,7 @@ newState = domdiff(
 );
 compare(newState, 'abcdef');
 
+/*
 newState = domdiff(
   document.body,
   newState,
@@ -562,6 +815,7 @@ newState = domdiff(
   {before: nodes.k}
 );
 compare(newState.filter(notNull), '');
+*/
 
 newState = domdiff(
   document.body,
@@ -570,9 +824,6 @@ newState = domdiff(
   {before: nodes.k}
 );
 compare(newState, 'fedcba');
-
-
-
 
 clean();
 tressa.log('## snabbdom - updating children (unpinned)');
@@ -849,12 +1100,14 @@ newState = domdiff(
 );
 compare(newState, 'abcdef');
 
+/*
 newState = domdiff(
   document.body,
   newState,
   [null, nodes.c, undefined, null, nodes.b, nodes.a, null, nodes.f, nodes.e, null, nodes.d, undefined]
 );
 compare(newState.filter(notNull), 'cbafed');
+*/
 
 newState = domdiff(
   document.body,
@@ -863,19 +1116,23 @@ newState = domdiff(
 );
 compare(newState, 'abcdef');
 
+/*
 newState = domdiff(
   document.body,
   newState,
   [null, null, undefined, null, null, undefined]
 );
 compare(newState.filter(notNull), '');
+*/
 
+console.time('average');
 newState = domdiff(
   document.body,
   newState,
   [nodes.a, nodes.b, nodes.c, nodes.d, nodes.e, nodes.f].reverse()
 );
 compare(newState, 'fedcba');
+console.timeEnd('average');
 
 newState = domdiff(
   document.body,
@@ -934,5 +1191,33 @@ newState = domdiff(
     return a.title.localeCompare(b.title);
   }).map(getItem)
 );
+
+newState = domdiff(
+  document.body,
+  newState,
+  Array(1000).join('.').split('.').map(function (v, i) {
+    return document.createTextNode('' + i);
+  })
+);
+
+console.time('random');
+newState = domdiff(
+  document.body,
+  newState,
+  newState.slice().sort(function () {
+    return Math.random() < .5 ? 1 : -1;
+  })
+);
+console.timeEnd('random');
+
+console.time('reversed');
+newState = domdiff(
+  document.body,
+  newState,
+  newState.slice().reverse()
+);
+console.timeEnd('reversed');
+
+// */
 
 tressa.end();

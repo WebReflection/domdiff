@@ -1,0 +1,144 @@
+<!doctype html>
+<html>
+  <head>
+    <title>DOMDiff Benchmark</title>
+    <meta charset="utf-8">
+    <script defer src="../index.js"></script>
+    <script defer>
+if (!console.time) {
+  console.time = function (name) {
+    this['_' + name] = (new Date).getTime();
+  };
+  console.timeEnd = function (name) {
+    var time = (new Date).getTime() - this['_' + name];
+    this.log(name + ': ' + time + 'ms');
+  };
+}
+
+this.onload = function () {
+  var length = parseInt(location.search.slice(1), 10) || 1000;
+  var nodes = [];
+  var queue = [];
+  for (var i = 0; i < length; i++)
+   (nodes[i] = document.createElement('div')).textContent = i;
+  var half = nodes.slice(0, Math.round(length / 2));
+
+  var title = 'Benchmark of ' + length + ' nodes completed';
+  console.log(title);
+  console.time(title);
+
+  exec('native append', function () {
+    for (var i = 0; i < length; i++)
+      document.body.appendChild(nodes[i]);
+  });
+
+  exec('native remove', function () {
+    for (var i = 0; i < length; i++)
+      document.body.removeChild(nodes[i]);
+  });
+
+  exec('domdiff append', function () {
+    domdiff(
+      document.body,
+      [],
+      nodes
+    );
+  });
+
+  exec('domdiff reverse', function () {
+    nodes = domdiff(
+      document.body,
+      nodes,
+      nodes.slice().reverse()
+    );
+  });
+
+  exec('domdiff random sort 1', function () {
+    nodes = domdiff(
+      document.body,
+      nodes,
+      nodes.slice().sort(function () {
+        return Math.random() < .5 ? -1 : 1;
+      })
+    );
+  });
+
+  exec('domdiff random sort 2', function () {
+    nodes = domdiff(
+      document.body,
+      nodes,
+      nodes.slice().sort(function () {
+        return Math.random() < .5 ? -1 : 1;
+      })
+    );
+  });
+
+  exec('domdiff random sort 3', function () {
+    nodes = domdiff(
+      document.body,
+      nodes,
+      nodes.slice().sort(function () {
+        return Math.random() < .5 ? -1 : 1;
+      })
+    );
+  });
+
+  exec('domdiff all to half', function () {
+    domdiff(
+      document.body,
+      nodes,
+      half
+    );
+  });
+
+  exec('domdiff half to all', function () {
+    domdiff(
+      document.body,
+      half,
+      nodes
+    );
+  });
+
+  exec('domdiff reverted similar', function () {
+    var similar = nodes.slice(0).reverse();
+    similar[Math.floor(length / 2)] = document.createElement('div');
+    nodes = domdiff(
+      document.body,
+      nodes,
+      similar
+    );
+  });
+
+  exec('domdiff remove', function () {
+    domdiff(
+      document.body,
+      nodes,
+      []
+    );
+  });
+
+  exec.queue.push(function () {
+    console.timeEnd(title);
+  });
+
+  function exec(name, callback) {
+    exec.delay = 100;
+    var fn = function () {
+      console.time(name);
+      callback();
+      console.timeEnd(name);
+      if (exec.queue.length)
+        setTimeout(exec.queue.shift(), exec.delay);
+    };
+    if (exec.queue)
+      exec.queue.push(fn);
+    else {
+      exec.queue = [];
+      setTimeout(fn, exec.delay);
+    }
+  }
+};
+    </script>
+  </head>
+  <body></body>
+</html>

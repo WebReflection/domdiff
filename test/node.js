@@ -1,4 +1,5 @@
 global.tressa = require('tressa');
+global.Set = undefined;
 global.domdiff = require('../cjs').default;
 global.document = {
   createTextNode: function (value) {
