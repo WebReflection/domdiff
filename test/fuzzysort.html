@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <style>
+  div {
+    width: 100px;
+    display: inline-block;
+  }
+  </style>
+  <script defer src="../index.js"></script>
+  <script>
+this.onload = () => {
+  const numberOfElements = 10000
+  const items = Array.apply(null, Array(numberOfElements)).map((el, i) => ({text: i})).sort(() => .5 < Math.random())
+  const sortMethods = [
+    
+    () => 0,
+    (a, b) => a.text - b.text,
+    (a, b) => b.text - a.text
+    
+  ]
+
+  function hyperHtmlTest() {
+    
+    const $node = document.createElement('div')
+    const $table = document.createElement('table')
+    const $button = document.createElement('button')
+
+    let sortMethodIndex = 0
+    let firstTime = true;
+    const map = new Map();
+    items.forEach(item => {
+      const tr = document.createElement('tr');
+      tr.appendChild(document.createElement('td')).textContent = item.text;
+      map.set(item, tr);
+    });
+    let rows = items.slice(0);
+
+    function render () {
+    
+      const sortMethod = sortMethods[sortMethodIndex++ % sortMethods.length]
+      rows = domdiff(
+        $table,
+        firstTime ? [] : rows,
+        items.concat().sort(sortMethod),
+        {node: item => map.get(item)}
+      );
+      firstTime = false;
+    }
+    
+    $node.appendChild($button)
+    $node.appendChild($table)
+
+    $button.textContent = 'HyperHTml Sort'
+    $button.onclick = render  
+    
+    return $node
+    
+  }
+
+  function normalHtmlTest() {
+    
+    const $node = document.createElement('div')
+    const $table = document.createElement('table')
+    const $button = document.createElement('button')
+
+    let sortMethodIndex = 0
+
+    function render () {
+    
+      const sortMethod = sortMethods[sortMethodIndex++ % sortMethods.length]
+      
+      while($table.childNodes.length)
+        $table.removeChild($table.childNodes[0])
+      
+      const frag = document.createDocumentFragment()
+      
+      items.concat().sort(sortMethod).forEach(item => {
+        
+        const tr = document.createElement('tr')
+        const td = document.createElement('td')
+        
+        td.textContent = item.text
+        tr.appendChild(td)
+        
+        frag.appendChild(tr)
+        
+      })
+      
+      $table.appendChild(frag)
+
+    }
+    
+    $node.appendChild($button)
+    $node.appendChild($table)
+
+    $button.textContent = 'NormalHtml Sort'
+    $button.onclick = render  
+    
+    return $node
+    
+  }
+
+  document.body.appendChild(hyperHtmlTest())
+  document.body.appendChild(normalHtmlTest())
+};
+  </script>
+</head>
+<body>
+  
+</body>
+</html>
