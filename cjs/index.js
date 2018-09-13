@@ -1,26 +1,9 @@
 'use strict';
-/*! (c) 2017 Andrea Giammarchi (ISC) */
+/*! (c) 2018 Andrea Giammarchi (ISC) */
 
-/**
- * This code is a revisited port of the snabbdom vDOM diffing logic,
- * the same that fuels as fork Vue.js or other libraries.
- * @credits https://github.com/snabbdom/snabbdom
- */
-
-const eqeq = (a, b) => a == b;
-
-const identity = O => O;
-
-const remove = (get, parentNode, before, after) => {
-  if (after == null) {
-    parentNode.removeChild(get(before, -1));
-  } else {
-    const range = parentNode.ownerDocument.createRange();
-    range.setStartBefore(get(before, -1));
-    range.setEndAfter(get(after, -1));
-    range.deleteContents();
-  }
-};
+const {
+  eqeq, identity, indexOf, isReversed, next, append, remove, smartDiff
+} = require('./utils.js');
 
 const domdiff = (
   parentNode,     // where changes happen
@@ -33,128 +16,206 @@ const domdiff = (
 ) => {
   if (!options)
     options = {};
+
   const compare = options.compare || eqeq;
   const get = options.node || identity;
   const before = options.before == null ? null : get(options.before, 0);
-  let currentStart = 0, futureStart = 0;
-  let currentEnd = currentNodes.length - 1;
-  let currentStartNode = currentNodes[0];
-  let currentEndNode = currentNodes[currentEnd];
-  let futureEnd = futureNodes.length - 1;
-  let futureStartNode = futureNodes[0];
-  let futureEndNode = futureNodes[futureEnd];
-  while (currentStart <= currentEnd && futureStart <= futureEnd) {
-    if (currentStartNode == null) {
-      currentStartNode = currentNodes[++currentStart];
-    }
-    else if (currentEndNode == null) {
-      currentEndNode = currentNodes[--currentEnd];
-    }
-    else if (futureStartNode == null) {
-      futureStartNode = futureNodes[++futureStart];
-    }
-    else if (futureEndNode == null) {
-      futureEndNode = futureNodes[--futureEnd];
-    }
-    else if (compare(currentStartNode, futureStartNode)) {
-      currentStartNode = currentNodes[++currentStart];
-      futureStartNode = futureNodes[++futureStart];
-    }
-    else if (compare(currentEndNode, futureEndNode)) {
-      currentEndNode = currentNodes[--currentEnd];
-      futureEndNode = futureNodes[--futureEnd];
-    }
-    else if (compare(currentStartNode, futureEndNode)) {
-      parentNode.insertBefore(
-        get(currentStartNode, 1),
-        get(currentEndNode, -0).nextSibling
+
+  const currentLength = currentNodes.length;
+  let currentEnd = currentLength;
+  let currentStart = 0;
+
+  let futureEnd = futureNodes.length;
+  let futureStart = 0;
+
+  // common prefix
+  while (
+    currentStart < currentEnd &&
+    futureStart < futureEnd &&
+    compare(currentNodes[currentStart], futureNodes[futureStart])
+  ) {
+    currentStart++;
+    futureStart++;
+  }
+
+  // common suffix
+  while (
+    currentStart < currentEnd &&
+    futureStart < futureEnd &&
+    compare(currentNodes[currentEnd - 1], futureNodes[futureEnd - 1])
+  ) {
+    currentEnd--;
+    futureEnd--;
+  }
+
+  const currentSame = currentStart === currentEnd;
+  const futureSame = futureStart === futureEnd;
+
+  // same list
+  if (currentSame && futureSame)
+    return futureNodes;
+
+  // only stuff to add
+  if (currentSame && futureStart < futureEnd) {
+    append(
+      get,
+      parentNode,
+      futureNodes,
+      futureStart,
+      futureEnd,
+      next(get, currentNodes, currentStart, currentLength, before)
+    );
+    return futureNodes;
+  }
+
+  // only stuff to remove
+  if (futureSame && currentStart < currentEnd) {
+    remove(
+      get,
+      parentNode,
+      currentNodes,
+      currentStart,
+      currentEnd
+    );
+    return futureNodes;
+  }
+
+  const currentChanges = currentEnd - currentStart;
+  const futureChanges = futureEnd - futureStart;
+  let i = -1;
+
+  // 2 simple indels: the shortest sequence is a subsequence of the longest
+  if (currentChanges < futureChanges) {
+    i = indexOf(
+      futureNodes,
+      futureStart,
+      futureEnd,
+      currentNodes,
+      currentStart,
+      currentEnd,
+      compare
+    );
+    // inner diff
+    if (-1 < i) {
+      append(
+        get,
+        parentNode,
+        futureNodes,
+        futureStart,
+        i,
+        get(currentNodes[currentStart], 0)
       );
-      currentStartNode = currentNodes[++currentStart];
-      futureEndNode = futureNodes[--futureEnd];
-    }
-    else if (compare(currentEndNode, futureStartNode)) {
-      parentNode.insertBefore(
-        get(currentEndNode, 1),
-        get(currentStartNode, 0)
+      append(
+        get,
+        parentNode,
+        futureNodes,
+        i + currentChanges,
+        futureEnd,
+        next(get, currentNodes, currentEnd, currentLength, before)
       );
-      currentEndNode = currentNodes[--currentEnd];
-      futureStartNode = futureNodes[++futureStart];
-    }
-    else {
-      let index = currentNodes.indexOf(futureStartNode);
-      if (index < 0) {
-        parentNode.insertBefore(
-          get(futureStartNode, 1),
-          get(currentStartNode, 0)
-        );
-        futureStartNode = futureNodes[++futureStart];
-      }
-      else {
-        let i = index;
-        let f = futureStart;
-        while (
-          i <= currentEnd &&
-          f <= futureEnd &&
-          currentNodes[i] === futureNodes[f]
-        ) {
-          i++;
-          f++;
-        }
-        if (1 < (i - index)) {
-          if (--index === currentStart) {
-            parentNode.removeChild(get(currentStartNode, -1));
-          } else {
-            remove(
-              get,
-              parentNode,
-              currentStartNode,
-              currentNodes[index]
-            );
-          }
-          currentStart = i;
-          futureStart = f;
-          currentStartNode = currentNodes[i];
-          futureStartNode = futureNodes[f];
-        } else {
-          const el = currentNodes[index];
-          currentNodes[index] = null;
-          parentNode.insertBefore(get(el, 1), get(currentStartNode, 0));
-          futureStartNode = futureNodes[++futureStart];
-        }
-      }
+      return futureNodes;
     }
   }
-  if (currentStart <= currentEnd || futureStart <= futureEnd) {
-    if (currentStart > currentEnd) {
-      const pin = futureNodes[futureEnd + 1];
-      const place = pin == null ? before : get(pin, 0);
-      if (futureStart === futureEnd) {
-        parentNode.insertBefore(get(futureNodes[futureStart], 1), place);
-      }
-      else {
-        const fragment = parentNode.ownerDocument.createDocumentFragment();
-        while (futureStart <= futureEnd) {
-          fragment.appendChild(get(futureNodes[futureStart++], 1));
-        }
-        parentNode.insertBefore(fragment, place);
-      }
-    }
-    else {
-      if (currentNodes[currentStart] == null)
-        currentStart++;
-      if (currentStart === currentEnd) {
-        parentNode.removeChild(get(currentNodes[currentStart], -1));
-      }
-      else {
-        remove(
-          get,
-          parentNode,
-          currentNodes[currentStart],
-          currentNodes[currentEnd]
-        );
-      }
+  /* istanbul ignore else */
+  else if (futureChanges < currentChanges) {
+    i = indexOf(
+      currentNodes,
+      currentStart,
+      currentEnd,
+      futureNodes,
+      futureStart,
+      futureEnd,
+      compare
+    );
+    // outer diff
+    if (-1 < i) {
+      remove(
+        get,
+        parentNode,
+        currentNodes,
+        currentStart,
+        i
+      );
+      remove(
+        get,
+        parentNode,
+        currentNodes,
+        i + futureChanges,
+        currentEnd
+      );
+      return futureNodes;
     }
   }
+
+  // common case with one replacement for many nodes
+  // or many nodes replaced for a single one
+  /* istanbul ignore else */
+  if ((currentChanges < 2 || futureChanges < 2)) {
+    append(
+      get,
+      parentNode,
+      futureNodes,
+      futureStart,
+      futureEnd,
+      get(currentNodes[currentStart], 0)
+    );
+    remove(
+      get,
+      parentNode,
+      currentNodes,
+      currentStart,
+      currentEnd
+    );
+    return futureNodes;
+  }
+
+  // the half match diff part has been skipped in petit-dom
+  // https://github.com/yelouafi/petit-dom/blob/bd6f5c919b5ae5297be01612c524c40be45f14a7/src/vdom.js#L391-L397
+  // accordingly, I think it's safe to skip in here too
+  // if one day it'll come out like the speediest thing ever to do
+  // then I might add it in here too
+
+  // Extra: before going too fancy, what about reversed lists ?
+  //        This should bail out pretty quickly if that's not the case.
+  if (
+    currentChanges === futureChanges &&
+    isReversed(
+      futureNodes,
+      futureEnd,
+      currentNodes,
+      currentStart,
+      currentEnd,
+      compare
+    )
+  ) {
+    append(
+      get,
+      parentNode,
+      futureNodes,
+      futureStart,
+      futureEnd,
+      next(get, currentNodes, currentEnd, currentLength, before)
+    );
+    return futureNodes;
+  }
+
+  // last resort through a smart diff
+  smartDiff(
+    get,
+    parentNode,
+    futureNodes,
+    futureStart,
+    futureEnd,
+    futureChanges,
+    currentNodes,
+    currentStart,
+    currentEnd,
+    currentChanges,
+    currentLength,
+    compare,
+    before
+  );
+
   return futureNodes;
 };
 

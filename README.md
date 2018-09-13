@@ -3,7 +3,30 @@
 [![donate](https://img.shields.io/badge/$-donate-ff69b4.svg?maxAge=2592000&style=flat)](https://github.com/WebReflection/donate) [![Coverage Status](https://coveralls.io/repos/github/WebReflection/domdiff/badge.svg?branch=master)](https://coveralls.io/github/WebReflection/domdiff?branch=master) [![Build Status](https://travis-ci.org/WebReflection/domdiff.svg?branch=master)](https://travis-ci.org/WebReflection/domdiff) [![License: ISC](https://img.shields.io/badge/License-ISC-yellow.svg)](https://opensource.org/licenses/ISC)
 
 
-A vDOM-less implementation of the [snabbdom](https://github.com/snabbdom/snabbdom) diffing logic.
+A vDOM-less implementation of the [petit-dom](https://github.com/yelouafi/petit-dom) diffing logic.
+
+
+### V2 breaking change
+
+  * the good old snabdom diff logic has been 100% replaced
+  * lists with `null` or `undefined` nodes are not allowed anymore
+
+<sup><sub>... but I guess having null nodes in the equation was quite possibly a bad idea in the first place ...</sub></sup>
+
+#### V2 Diffing Strategies:
+
+  * common prefixes
+  * common suffixes
+  * skip same lists
+  * add boundaries
+  * remove boundaries
+  * simple sub-sequences insertions and removals
+  * one to many and many to one replacements
+  * fast inverted list swap
+  * O(ND) algo with a limit of 50 attempts
+  * last fallback with a simplified Hunt Szymanski algorithm
+
+The current goal is to have in about 1K the best DOM diffing library out there.
 
 #### V1 breaking change
 
