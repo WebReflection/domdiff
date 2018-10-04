@@ -3,7 +3,7 @@
 [![donate](https://img.shields.io/badge/$-donate-ff69b4.svg?maxAge=2592000&style=flat)](https://github.com/WebReflection/donate) [![Coverage Status](https://coveralls.io/repos/github/WebReflection/domdiff/badge.svg?branch=master)](https://coveralls.io/github/WebReflection/domdiff?branch=master) [![Build Status](https://travis-ci.org/WebReflection/domdiff.svg?branch=master)](https://travis-ci.org/WebReflection/domdiff) [![License: ISC](https://img.shields.io/badge/License-ISC-yellow.svg)](https://opensource.org/licenses/ISC)
 
 
-A vDOM-less implementation of the [petit-dom](https://github.com/yelouafi/petit-dom) diffing logic.
+A vDOM-less implementation of the [petit-dom](https://github.com/yelouafi/petit-dom) diffing logic, ad the core of [hyperHTML](https://github.com/WebReflection/hyperHTML).
 
 
 ### V2 breaking change
