@@ -1,6 +1,43 @@
 var domdiff = (function () {
 'use strict';
 
+/*! (c) Andrea Giammarchi - ISC */
+var window = null || /* istanbul ignore next */{};
+try {
+  window.Map = Map;
+} catch (Map) {
+  window.Map = function Map() {
+    var i = 0;
+    var k = [];
+    var v = [];
+    return {
+      delete: function _delete(key) {
+        var had = contains(key);
+        if (had) {
+          k.splice(i, 1);
+          v.splice(i, 1);
+        }
+        return had;
+      },
+      get: function get(key) {
+        return contains(key) ? v[i] : void 0;
+      },
+      has: function has(key) {
+        return contains(key);
+      },
+      set: function set(key, value) {
+        v[contains(key) ? i : k.push(key) - 1] = value;
+        return this;
+      }
+    };
+    function contains(v) {
+      i = k.indexOf(v);
+      return -1 < i;
+    }
+  };
+}
+var Map$1 = window.Map;
+
 var append = function append(get, parent, children, start, end, before) {
   if (end - start < 2) parent.insertBefore(get(children[start], 1), before);else {
     var fragment = parent.ownerDocument.createDocumentFragment();
@@ -65,24 +102,6 @@ var INSERTION = 1;
 var SKIP = 0;
 var SKIP_OND = 50;
 
-/* istanbul ignore next */
-var Rel = typeof Map === 'undefined' ? function () {
-  var k = [],
-      v = [];
-  return {
-    has: function has(key) {
-      return -1 < k.indexOf(key);
-    },
-    get: function get(key) {
-      return v[k.indexOf(key)];
-    },
-    set: function set(key, value) {
-      var i = k.indexOf(key);
-      v[i < 0 ? k.push(key) - 1 : i] = value;
-    }
-  };
-} : Map;
-
 var HS = function HS(futureNodes, futureStart, futureEnd, futureChanges, currentNodes, currentStart, currentEnd, currentChanges) {
 
   var k = 0;
@@ -94,7 +113,7 @@ var HS = function HS(futureNodes, futureStart, futureEnd, futureChanges, current
 
   for (var i = 1; i < minLen; i++) {
     tresh[i] = currentEnd;
-  }var keymap = new Rel();
+  }var keymap = new Map$1();
   for (var _i = currentStart; _i < currentEnd; _i++) {
     keymap.set(currentNodes[_i], _i);
   }for (var _i2 = futureStart; _i2 < futureEnd; _i2++) {
@@ -215,7 +234,7 @@ var OND = function OND(futureNodes, futureStart, rows, currentNodes, currentStar
 };
 
 var applyDiff = function applyDiff(diff, get, parentNode, futureNodes, futureStart, currentNodes, currentStart, currentLength, before) {
-  var live = new Rel();
+  var live = new Map$1();
   var length = diff.length;
   var currentIndex = currentStart;
   var i = 0;
