@@ -103,11 +103,11 @@ const Rel = typeof Map === 'undefined' ?
   function () {
     const k = [], v = [];
     return {
-      has: value => -1 < k.indexOf(value),
-      get: value => v[k.indexOf(value)],
-      set: value => {
-        const i = k.indexOf(value);
-        v[i < 0 ? (k.push(value) - 1) : i] = value;
+      has: key => -1 < k.indexOf(key),
+      get: key => v[k.indexOf(key)],
+      set: (key, value) => {
+        const i = k.indexOf(key);
+        v[i < 0 ? (k.push(key) - 1) : i] = value;
       }
     };
   } :
