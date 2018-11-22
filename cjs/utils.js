@@ -1,4 +1,6 @@
 'use strict';
+const Map = (require('@ungap/essential-map'));
+
 const append = (get, parent, children, start, end, before) => {
   if ((end - start) < 2)
     parent.insertBefore(get(children[start], 1), before);
@@ -98,22 +100,6 @@ const INSERTION = 1;
 const SKIP = 0;
 const SKIP_OND = 50;
 
-/* istanbul ignore next */
-const Rel = typeof Map === 'undefined' ?
-  function () {
-    const k = [], v = [];
-    return {
-      has: key => -1 < k.indexOf(key),
-      get: key => v[k.indexOf(key)],
-      set: (key, value) => {
-        const i = k.indexOf(key);
-        v[i < 0 ? (k.push(key) - 1) : i] = value;
-      }
-    };
-  } :
-  Map
-;
-
 const HS = (
   futureNodes,
   futureStart,
@@ -135,7 +121,7 @@ const HS = (
   for (let i = 1; i < minLen; i++)
     tresh[i] = currentEnd;
 
-  const keymap = new Rel;
+  const keymap = new Map;
   for (let i = currentStart; i < currentEnd; i++)
     keymap.set(currentNodes[i], i);
 
@@ -282,7 +268,7 @@ const applyDiff = (
   currentLength,
   before
 ) => {
-  const live = new Rel;
+  const live = new Map;
   const length = diff.length;
   let currentIndex = currentStart;
   let i = 0;
