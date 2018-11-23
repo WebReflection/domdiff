@@ -49,7 +49,7 @@
     "test": "test"
   },
   "dependencies": {
-    "@ungap/essential-map": "^0.1.5"
+    "@ungap/essential-map": "^0.1.7"
   },
   "repository": {
     "type": "git",

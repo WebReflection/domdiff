@@ -2,11 +2,11 @@ var domdiff = (function () {
 'use strict';
 
 /*! (c) Andrea Giammarchi - ISC */
-var window = null || /* istanbul ignore next */{};
+var self = null || /* istanbul ignore next */{};
 try {
-  window.Map = Map;
+  self.Map = Map;
 } catch (Map) {
-  window.Map = function Map() {
+  self.Map = function Map() {
     var i = 0;
     var k = [];
     var v = [];
@@ -36,7 +36,7 @@ try {
     }
   };
 }
-var Map$1 = window.Map;
+var Map$1 = self.Map;
 
 var append = function append(get, parent, children, start, end, before) {
   if (end - start < 2) parent.insertBefore(get(children[start], 1), before);else {
