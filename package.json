@@ -5,6 +5,7 @@
   "unpkg": "min.js",
   "main": "cjs/index.js",
   "module": "esm/index.js",
+  "types": "types.d.ts",
   "scripts": {
     "build": "npm run cjs && npm run bundle && npm run min && npm run test && npm run size",
     "bundle": "rollup --config rollup.config.js && npm run cleanup",
