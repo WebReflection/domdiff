@@ -288,7 +288,7 @@ const applyDiff = (
           futureStart++,
           futureStart,
           currentIndex < currentLength ?
-            get(currentNodes[currentIndex], 1) :
+            get(currentNodes[currentIndex], 0) :
             before
         );
         break;
