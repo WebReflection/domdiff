@@ -1218,6 +1218,26 @@ newState = domdiff(
 );
 console.timeEnd('reversed');
 
+document.body.selectedIndex = -1;
+newState = domdiff(
+  document.body,
+  newState,
+  []
+);
+
+var option = document.createTextNode('b');
+option.selected = true;
+newState = domdiff(
+  document.body,
+  newState,
+  [
+    document.createTextNode('a'),
+    option,
+    document.createTextNode('c')
+  ]
+);
+
+console.assert(document.body.selectedIndex === 1, 'selectedIndex is OK');
 // */
 
 tressa.end();

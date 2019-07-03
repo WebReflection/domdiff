@@ -1,8 +1,17 @@
 import Map from '@ungap/essential-map';
 
 export const append = (get, parent, children, start, end, before) => {
-  while (start < end)
-    parent.insertBefore(get(children[start++], 1), before);
+  const isSelect = 'selectedIndex' in parent;
+  let selectedIndex = -1;
+  while (start < end) {
+    const child = get(children[start], 1);
+    if (isSelect && selectedIndex < 0 && child.selected)
+      selectedIndex = start;
+    parent.insertBefore(child, before);
+    start++;
+  }
+  if (isSelect && -1 < selectedIndex)
+    parent.selectedIndex = selectedIndex;
 };
 
 export const eqeq = (a, b) => a == b;
