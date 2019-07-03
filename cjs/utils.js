@@ -2,14 +2,8 @@
 const Map = (require('@ungap/essential-map'));
 
 const append = (get, parent, children, start, end, before) => {
-  if ((end - start) < 2)
-    parent.insertBefore(get(children[start], 1), before);
-  else {
-    const fragment = parent.ownerDocument.createDocumentFragment();
-    while (start < end)
-      fragment.appendChild(get(children[start++], 1));
-    parent.insertBefore(fragment, before);
-  }
+  while (start < end)
+    parent.insertBefore(get(children[start++], 1), before);
 };
 exports.append = append;
 
