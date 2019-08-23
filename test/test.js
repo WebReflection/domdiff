@@ -1236,8 +1236,36 @@ newState = domdiff(
     document.createTextNode('c')
   ]
 );
-
 console.assert(document.body.selectedIndex === 1, 'selectedIndex is OK');
+
+newState = domdiff(
+  document.body,
+  newState,
+  []
+);
+document.body.selectedIndex = 0;
+document.body.querySelectorAll = _ => newState.concat(newOptions);
+option = document.createTextNode('option');
+option.selected = true;
+newState = domdiff(
+  document.body,
+  newState,
+  [
+    document.createTextNode('option')
+  ]
+);
+var newOptions = [
+  document.createTextNode('option'),
+  option,
+  document.createTextNode('option')
+];
+newState = domdiff(
+  document.body,
+  newState,
+  newOptions
+);
+console.assert(document.body.selectedIndex === 2, 'partial selectedIndex is OK');
+
 // */
 
 tressa.end();

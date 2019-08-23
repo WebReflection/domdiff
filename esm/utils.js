@@ -1,17 +1,21 @@
 import Map from '@ungap/essential-map';
 
+const {indexOf: iOF} = [];
 export const append = (get, parent, children, start, end, before) => {
   const isSelect = 'selectedIndex' in parent;
-  let selectedIndex = -1;
+  let noSelection = isSelect;
   while (start < end) {
     const child = get(children[start], 1);
-    if (isSelect && selectedIndex < 0 && child.selected)
-      selectedIndex = start;
     parent.insertBefore(child, before);
+    if (isSelect && noSelection && child.selected) {
+      noSelection = !noSelection;
+      let {selectedIndex} = parent;
+      parent.selectedIndex = selectedIndex < 0 ?
+        start :
+        iOF.call(parent.querySelectorAll('option'), child);
+    }
     start++;
   }
-  if (isSelect && -1 < selectedIndex)
-    parent.selectedIndex = selectedIndex;
 };
 
 export const eqeq = (a, b) => a == b;
