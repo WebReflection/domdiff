@@ -1266,6 +1266,25 @@ newState = domdiff(
 );
 console.assert(document.body.selectedIndex === 2, 'partial selectedIndex is OK');
 
+var parent1 = document.createDocumentFragment();
+var parent2 = document.createDocumentFragment();
+var nodeA = document.createTextNode('option');
+var nodeB = document.createTextNode('option');
+var nodeC = document.createTextNode('option');
+var nodeD = document.createTextNode('option');
+
+domdiff(
+  parent1,
+  [nodeA, nodeB],
+  [nodeA, nodeB, nodeC]
+);
+
+domdiff(
+  parent2,
+  [nodeC, nodeD],
+  [nodeD]
+);
+
 // */
 
 tressa.end();

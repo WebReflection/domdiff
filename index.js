@@ -99,11 +99,8 @@ var next = function next(get, list, i, length, before) {
 };
 
 var remove = function remove(get, parent, children, start, end) {
-  if (end - start < 2) parent.removeChild(get(children[start], -1));else {
-    var range = parent.ownerDocument.createRange();
-    range.setStartBefore(get(children[start], -1));
-    range.setEndAfter(get(children[end - 1], -1));
-    range.deleteContents();
+  while (start < end) {
+    _removeChild(get(children[start++], -1), parent);
   }
 };
 
@@ -294,6 +291,21 @@ var findK = function findK(ktr, length, j) {
 
 var smartDiff = function smartDiff(get, parentNode, futureNodes, futureStart, futureEnd, futureChanges, currentNodes, currentStart, currentEnd, currentChanges, currentLength, compare, before) {
   applyDiff(OND(futureNodes, futureStart, futureChanges, currentNodes, currentStart, currentChanges, compare) || HS(futureNodes, futureStart, futureEnd, futureChanges, currentNodes, currentStart, currentEnd, currentChanges), get, parentNode, futureNodes, futureStart, currentNodes, currentStart, currentLength, before);
+};
+
+var _removeChild = function removeChild(child, parentNode) {
+  /* istanbul ignore if */
+  if ('remove' in child) {
+    _removeChild = function removeChild(child) {
+      child.remove();
+    };
+  } else {
+    _removeChild = function removeChild(child, parentNode) {
+      /* istanbul ignore else */
+      if (child.parentNode === parentNode) parentNode.removeChild(child);
+    };
+  }
+  _removeChild(child, parentNode);
 };
 
 /*! (c) 2018 Andrea Giammarchi (ISC) */
