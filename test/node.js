@@ -18,15 +18,9 @@ global.document = {
         var cn = [];
         return {
           appendChild: function (node) {
+            node.parentNode = this;
             cn.push(node);
           }
-        };
-      },
-      createRange: function () {
-        return {
-          setStartBefore: function () {},
-          setEndAfter: function () {},
-          deleteContents: function () {}
         };
       }
     },
@@ -35,11 +29,13 @@ global.document = {
       var cn = this.childNodes;
       var i = cn.indexOf(before);
       if (-1 < i) cn.splice(i, 1);
+      before.parentNode = this;
       if (after == null) cn.push(before);
       else cn.splice(cn.indexOf(after), 0, before);
     },
     removeChild: function (child) {
       var cn = this.childNodes;
+      delete child.parentNode;
       cn.splice(cn.indexOf(child), 1);
     }
   }
