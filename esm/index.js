@@ -73,7 +73,6 @@ const domdiff = (
   if (futureSame && currentStart < currentEnd) {
     remove(
       get,
-      parentNode,
       currentNodes,
       currentStart,
       currentEnd
@@ -132,14 +131,12 @@ const domdiff = (
     if (-1 < i) {
       remove(
         get,
-        parentNode,
         currentNodes,
         currentStart,
         i
       );
       remove(
         get,
-        parentNode,
         currentNodes,
         i + futureChanges,
         currentEnd
@@ -162,7 +159,6 @@ const domdiff = (
     );
     remove(
       get,
-      parentNode,
       currentNodes,
       currentStart,
       currentEnd
