@@ -86,9 +86,9 @@ const next = (get, list, i, length, before) => i < length ?
                 before);
 exports.next = next;
 
-const remove = (get, parent, children, start, end) => {
+const remove = (get, children, start, end) => {
   while (start < end)
-    removeChild(get(children[start++], -1), parent);
+    drop(get(children[start++], -1));
 };
 exports.remove = remove;
 
@@ -311,7 +311,6 @@ const applyDiff = (
         else
           remove(
             get,
-            parentNode,
             currentNodes,
             currentStart++,
             currentStart
@@ -381,19 +380,11 @@ const smartDiff = (
 };
 exports.smartDiff = smartDiff;
 
-let removeChild = (child, parentNode) => {
-  /* istanbul ignore if */
-  if ('remove' in child) {
-    removeChild = child => {
-      child.remove();
-    };
-  }
-  else {
-    removeChild = (child, parentNode) => {
-      /* istanbul ignore else */
-      if (child.parentNode === parentNode)
-        parentNode.removeChild(child);
-    };
-  }
-  removeChild(child, parentNode);
-};
+const drop = node => (node.remove || dropChild).call(node);
+
+function dropChild() {
+  const {parentNode} = this;
+  /* istanbul ignore else */
+  if (parentNode)
+    parentNode.removeChild(this);
+}
