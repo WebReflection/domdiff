@@ -1,5 +1,3 @@
-import Map from '@ungap/essential-map';
-
 const {indexOf: iOF} = [];
 export const append = (get, parent, children, start, end, before) => {
   const isSelect = 'selectedIndex' in parent;
@@ -114,13 +112,12 @@ const HS = (
   for (let i = 1; i < minLen; i++)
     tresh[i] = currentEnd;
 
-  const keymap = new Map;
-  for (let i = currentStart; i < currentEnd; i++)
-    keymap.set(currentNodes[i], i);
+  const nodes = currentNodes.slice(currentStart, currentEnd);
 
   for (let i = futureStart; i < futureEnd; i++) {
-    const idxInOld = keymap.get(futureNodes[i]);
-    if (idxInOld != null) {
+    const index = nodes.indexOf(futureNodes[i]);
+    if (-1 < index) {
+      const idxInOld = index + currentStart;
       k = findK(tresh, minLen, idxInOld);
       /* istanbul ignore else */
       if (-1 < k) {
@@ -261,7 +258,7 @@ const applyDiff = (
   currentLength,
   before
 ) => {
-  const live = new Map;
+  const live = [];
   const length = diff.length;
   let currentIndex = currentStart;
   let i = 0;
@@ -273,7 +270,7 @@ const applyDiff = (
         break;
       case INSERTION:
         // TODO: bulk appends for sequential nodes
-        live.set(futureNodes[futureStart], 1);
+        live.push(futureNodes[futureStart]);
         append(
           get,
           parentNode,
@@ -298,7 +295,7 @@ const applyDiff = (
         break;
       case DELETION:
         // TODO: bulk removes for sequential nodes
-        if (live.has(currentNodes[currentStart]))
+        if (-1 < live.indexOf(currentNodes[currentStart]))
           currentStart++;
         else
           remove(

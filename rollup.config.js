@@ -1,14 +1,11 @@
 import babel from 'rollup-plugin-babel';
 import resolve from 'rollup-plugin-node-resolve';
-
 export default {
   input: 'esm/index.js',
   plugins: [
-    resolve({
-      module: true
-    }),
+    resolve(),
     babel({
-      plugins: require('./babel-plugins.json')
+      presets: ['@babel/preset-env']
     })
   ],
   context: 'null',
