@@ -1,4 +1,5 @@
-const {indexOf: iOF} = [];
+import {indexOf as iOF} from 'uarray';
+
 export const append = (get, parent, children, start, end, before) => {
   const isSelect = 'selectedIndex' in parent;
   let noSelection = isSelect;

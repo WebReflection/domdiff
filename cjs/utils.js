@@ -1,5 +1,6 @@
 'use strict';
-const {indexOf: iOF} = [];
+const {indexOf: iOF} = require('uarray');
+
 const append = (get, parent, children, start, end, before) => {
   const isSelect = 'selectedIndex' in parent;
   let noSelection = isSelect;

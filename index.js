@@ -1,7 +1,9 @@
 var domdiff = (function () {
   'use strict';
 
-  var iOF = [].indexOf;
+  var _ref = [],
+      indexOf = _ref.indexOf;
+
   var append = function append(get, parent, children, start, end, before) {
     var isSelect = 'selectedIndex' in parent;
     var noSelection = isSelect;
@@ -13,7 +15,7 @@ var domdiff = (function () {
       if (isSelect && noSelection && child.selected) {
         noSelection = !noSelection;
         var selectedIndex = parent.selectedIndex;
-        parent.selectedIndex = selectedIndex < 0 ? start : iOF.call(parent.querySelectorAll('option'), child);
+        parent.selectedIndex = selectedIndex < 0 ? start : indexOf.call(parent.querySelectorAll('option'), child);
       }
 
       start++;
@@ -25,7 +27,7 @@ var domdiff = (function () {
   var identity = function identity(O) {
     return O;
   };
-  var indexOf = function indexOf(moreNodes, moreStart, moreEnd, lessNodes, lessStart, lessEnd, compare) {
+  var indexOf$1 = function indexOf(moreNodes, moreStart, moreEnd, lessNodes, lessStart, lessEnd, compare) {
     var length = lessEnd - lessStart;
     /* istanbul ignore if */
 
@@ -339,7 +341,7 @@ var domdiff = (function () {
     var i = -1; // 2 simple indels: the shortest sequence is a subsequence of the longest
 
     if (currentChanges < futureChanges) {
-      i = indexOf(futureNodes, futureStart, futureEnd, currentNodes, currentStart, currentEnd, compare); // inner diff
+      i = indexOf$1(futureNodes, futureStart, futureEnd, currentNodes, currentStart, currentEnd, compare); // inner diff
 
       if (-1 < i) {
         append(get, parentNode, futureNodes, futureStart, i, get(currentNodes[currentStart], 0));
@@ -349,7 +351,7 @@ var domdiff = (function () {
     }
     /* istanbul ignore else */
     else if (futureChanges < currentChanges) {
-        i = indexOf(currentNodes, currentStart, currentEnd, futureNodes, futureStart, futureEnd, compare); // outer diff
+        i = indexOf$1(currentNodes, currentStart, currentEnd, futureNodes, futureStart, futureEnd, compare); // outer diff
 
         if (-1 < i) {
           remove(get, currentNodes, currentStart, i);
