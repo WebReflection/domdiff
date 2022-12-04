@@ -107,6 +107,17 @@ futureState = domdiff(
 );
 compare(futureState, 'cgde');
 
+// move node to another parent
+var fragment = document.body.ownerDocument.createDocumentFragment();
+fragment.appendChild(nodes.g);
+futureState = domdiff(
+  document.body,
+  futureState,
+  [nodes.c, nodes.d, nodes.e]
+);
+compare(futureState, 'cde');
+assert(nodes.g.parentNode === fragment);
+
 // drop all nodes
 futureState = domdiff(
   document.body,
